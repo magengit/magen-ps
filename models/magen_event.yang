@@ -1,0 +1,84 @@
+module magen_event {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_event";
+
+  prefix magen_event;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Events.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+  container events {
+    list event {
+      key "client_uuid";
+      description
+        "A list that holds all policy sessions instantiated
+         from a policy contract";
+      leaf client_uuid {
+        type yang:uuid;
+        description "Policy Session UUID";
+      }
+      leaf source {
+        type string;
+        description "Event Source";
+      }
+      leaf severity {
+        type uint8;
+        description "Severity";
+      }
+      leaf creation_timestamp {
+        type yang:date-and-time;
+        description "Policy expiration time";
+      }
+      leaf version {
+        type uint8;
+        description "Severity";
+      }
+      leaf action {
+        type string;
+        description "Action";
+      }
+      leaf result {
+        type string;
+        description "Result";
+      }
+      leaf resource {
+        type string;
+        description "Resource";
+      }
+      leaf resource_id {
+        type int32;
+        description "Resource number";
+      }
+      leaf application {
+        type string;
+        description "Application Name";
+      }
+      leaf cookie {
+        type string;
+        description "Cookie";
+      }
+      leaf asset_name {
+        type string;
+        description "Asset name";
+      }
+    }
+  }
+}

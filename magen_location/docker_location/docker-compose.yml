@@ -1,0 +1,39 @@
+# In Order to Run Docker in interactive mode just change command (un-comment command on line 9 and
+# comment line 8
+# After saving changes in cur dir execute command:
+# docker-compose run --rm magen_location
+
+version: "2"
+services:
+    magen_location:
+        build: .
+        image: magen_location:v1.0
+        container_name: magen_location
+        command: bash -c "make all &&  python3 ./magen_location/location_server.py --pdp-server-ip-port magen_policy --console-log-level "debug" --log-dir "location_logs" 2>&1 >> ../location_server.log"
+ #       command: /bin/bash
+        ports:
+            - "5003:5003"
+        links:
+            - magen_policy:v1.0
+        volumes:
+            - ../..:/opt/server
+        depends_on:
+            - magen_policy
+        stdin_open: true
+        tty: true
+    magen_policy:
+        image: magen_policy:v1.0
+        container_name: magen_policy
+        command: bash -c "make all &&  python3 ./policy_server/policy_server.py --mongo-ip-port magen_mongo --console-log-level debug 2>&1 >> server.log"
+        ports:
+            - "5000:5000"
+        volumes:
+            - ../..:/opt/server
+        links:
+            - magen_mongo
+        depends_on:
+            - magen_mongo
+    magen_mongo:
+        image: mongo:latest
+        container_name: magen_mongo
+

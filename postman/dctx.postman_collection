@@ -1,0 +1,218 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Dctx: State Functions",
+    "_postman_id": "acfd188c-3421-69c5-ccb9-62116ae4050b",
+    "description": "Device Context database operations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Dctx::State: Get(All)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Retrieve all device context state records"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State: Delete(All)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Delete all device context state records"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State Upsert(jlaker@trafford.com, posture:compliant, security_group: 1956, endpointtype: ipad)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+	  "raw": "{\n    \"magen_dctx_update\": {\n    \t\"device_states\": [\n        \t{   \n            \t\"device_id\" : \"01.01.01.01.01.01\",\n            \t\"username\" : \"jlaker@trafford.com\",\n            \t\"posture\": \"compliant\",\n            \t\"security_group\": \"1956\",\n            \t\"endpointtype\": \"ipad\",\n            \t\"creation_timestamp\": \"2017-01-01T01:01:01.340000+00:00\",\n            \t\"version\": \"1\"\n        \t}\n    \t]\n    }\n}\n"
+        },
+        "description": "Create/update a single device context state record for indicated device with indicated properties"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State Upsert(jlaker@trafford.com, posture:noncompliant,  1956, endpointtype: ipad)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+	  "raw": "{\n    \"magen_dctx_update\": {\n    \t\"device_states\": [\n        \t{   \n            \t\"device_id\" : \"01.01.01.01.01.01\",\n            \t\"username\" : \"jlaker@trafford.com\",\n            \t\"posture\": \"noncompliant\",\n            \t\"security_group\": \"1956\",\n            \t\"endpointtype\": \"ipad\",\n            \t\"creation_timestamp\": \"2017-01-01T21:19:55.340000+00:00\",\n            \t\"version\": \"1\"\n        \t}\n    \t]\n    }\n}\n"
+        },
+        "description": "Create/update a single device context state record for indicated device with indicated properties"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State: Get(jlaker@trafford.com)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/jlaker@trafford.com/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Retrieve a single device context state record for indicated device"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State: Delete(jlaker@trafford.com)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/jlaker@trafford.com/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Delete a single device context state record for indicated device"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State Get(lhutton@kennington.com)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/lhutton@kennington.com/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Retrieve a single device context state record for indicated device"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State Delete(lhutton@kennington.com)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/lhutton@kennington.com/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Delete a single device context state record for indicated device"
+      },
+      "response": []
+    },
+    {
+      "name": "Dctx::State Upsert(lhutton@kennington.com, posture:noncompliant, securitroup: 1938, endpointtype: mac)",
+      "request": {
+        "url": "{{dctx-rest-pfx}}/magen/dctx/v1/states/state/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+	  "raw": "{\n    \"magen_dctx_update\": {\n    \t\"device_states\": [\n        \t{   \n            \t\"device_id\" : \"02.02.02.02.02.02\",\n            \t\"username\" : \"lhutton@kennington.com\",\n            \t\"posture\": \"noncompliant\",\n            \t\"security_group\": \"1938\",\n            \t\"endpointtype\": \"mac\",\n            \t\"creation_timestamp\": \"2017-02-02T21:19:55.340000+00:00\",\n            \t\"version\": \"1\"\n        \t}\n    \t]\n    }\n}\n"
+        },
+        "description": "Create/update a single device context state record for indicated device with indicated properties"
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+module magen_policy_contract {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_policy_contract";
+
+  prefix magen_policy_contract;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  import magen_policy_common {
+      prefix policy_common;
+      revision-date 2016-01-20;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Policy.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+
+  container policy_contracts  {
+    description
+      "A contract determines the entitlements between a client
+       and a set of documents";
+    list policy_contract {
+      key "uuid";
+      description
+        "A list that holds all contracts in the domain";
+      leaf uuid {
+        type yang:uuid;
+        description "Policy Contract UUID";
+      }
+      leaf policy_template_uuid {
+        type yang:uuid;
+        description "Policy Template UUID. A contract could be instantiated from a template";
+      }
+      leaf name {
+        type string;
+        description "Contract name";
+      }
+      leaf revision {
+        type string;
+        description "not sure the purpose of this";
+      }
+      leaf creation {
+        type yang:date-and-time;
+        description "Policy creation time";
+      }
+      leaf expiration {
+        type yang:date-and-time;
+        description "Policy expiration time";
+      }
+      leaf location_name {
+        type string;
+        description "Location name";
+      }
+      leaf owner {
+        type string;
+        description "Onwer or creator of the policy contract";
+      }
+      list policy_instance {
+          key "uuid";
+          description
+            "A list that holds all policy instances within a contract";
+          leaf uuid {
+            type yang:uuid;
+            description "Policy Instance UUID";
+          }
+          // This is how policy contract and its policy instances are linked
+      }
+      uses policy_common:policy_common-grp;
+    }
+  }
+}

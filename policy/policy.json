@@ -1,0 +1,28 @@
+{
+  "policy_contracts": {
+    "policy_contract": [
+      {
+        "uuid" : "15c3b5fd-9093-4eae-a1ac-dcae577cb207",
+        "name" : "Bob's policy",
+        "principal": "Bob",
+        "action": "open",
+        "resource_doc": "supersecretfile.doc",
+        "resource_group": "",
+        "time_validity_pi" : "30 days",
+        "location_name": "office"
+      },
+      {
+        "uuid" : "8f8164c6-fab8-40fa-965d-a101ef5546ad",
+        "name" : "mkt policy",
+        "principal": "",
+        "principal_group": "accounting",
+        "action": "open",
+        "resource": "",
+        "resource_group": "earnings",
+        "time_validity_pi" : "60 days",
+        "location_name": "campus"
+      }
+    ]
+  }
+}
+

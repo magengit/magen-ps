@@ -1,0 +1,71 @@
+module magen_policy_template {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_policy_template";
+
+  prefix magen_policy_template;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  import magen_policy_common {
+      prefix policy_common;
+      revision-date 2016-01-20;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Template policies.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+
+  container policy_templates  {
+    description
+      "A contract determines the entitlements between a client
+       and a set of documents";
+    list policy_template {
+      key "uuid";
+      description
+        "A list that holds all templates in the domain";
+      leaf uuid {
+        type yang:uuid;
+        description "Policy Template UUID";
+      }
+      leaf name {
+        type string;
+        description "Template name";
+      }
+      leaf expiration {
+        type yang:date-and-time;
+        description "Policy expiration time";
+      }
+      leaf action_id {
+        type int16;
+        description "Action Id that corresponds to string representation"
+      }
+      uses policy_common:policy_common-grp;
+      list policy_contracts {
+          key "uuid";
+          description
+            "A list that holds all policy contracts instantiated from a template";
+          leaf uuid {
+            type yang:uuid;
+            description "Policy Contract UUID";
+          }
+          // This is how policy contract and its policy instances are linked
+      }
+    }
+  }
+}

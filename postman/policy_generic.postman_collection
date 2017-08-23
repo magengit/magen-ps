@@ -1,0 +1,284 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Policy: Generic",
+    "_postman_id": "74dc6aef-305c-a14d-8838-009f334b2090",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PS: health check",
+      "request": {
+        "url": "{{policy-rest-pfx}}/check/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+           "mode": "raw",
+            "raw": ""
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: get logging level",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/logging_level/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+           "mode": "raw",
+            "raw": ""
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: set logging level == debug",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/logging_level/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"level\": \"debug\" }"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: get policy contracts",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/contracts/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: delete policy contracts",
+      "request": {
+        "url": "{{policy-rest-pfx}}//magen/policy/v2/contracts/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: get policy templates ",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/templates/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: delete policy templates",
+      "request": {
+        "url": "{{policy-rest-pfx}}//magen/policy/v2/templates/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: get policy sessions",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/sessions/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: delete policy sessions",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/sessions/",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "PS: get policy instances",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/instances/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Get Policy Instances"
+      },
+      "response": []
+    },
+    {
+      "name": "PS: reset with id-service sync",
+      "request": {
+        "url": "{{policy-rest-pfx}}/magen/policy/v2/full_reset/?idsvc_resync=True",
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Reset Policy Server (sync with ID service)"
+      },
+      "response": []
+    },
+    {
+      "name": "PS: reset without id_service sync",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/full_reset/?idsvc_resync=False",
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": null,
+        "description": "Reset Policy Server (no sync with ID service)"
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+module magen_policy_instance {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_policy_instance";
+
+  prefix magen_policy_instance;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  import magen_policy_common {
+      prefix policy_common;
+      revision-date 2016-01-20;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Policy Instances.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+
+  container instances {
+    config false;
+    list policy_instance {
+      key "uuid";
+      description
+        "A list that holds all policy instances";
+      leaf uuid {
+        type yang:uuid;
+        description "Policy Instance UUID";
+      }
+      leaf client_uuid {
+        type yang:uuid;
+        description "Reference to client";
+      }
+      leaf creation_timestamp {
+        type yang:date-and-time;
+        description "Policy creation time";
+      }
+      leaf validity_timestamp {
+        type yang:date-and-time;
+        description "Policy expiration time";
+      }
+      leaf policy_session_uuid {
+        type yang:uuid;
+        description "Policy session UUID";
+        // Link Policy Instance to Session
+      }
+      leaf location_constraint {
+        type string;
+        description "Location constraint";
+      }
+      leaf user {
+        type string;
+        description "User, usually copied from client";
+      }
+      uses policy_common:policy_common-grp;
+      leaf policy_uuid {
+        type yang:uuid;
+        description "Policy contract UUID";
+        // Link Policy Instance to Contract
+      }
+    }
+  }
+}

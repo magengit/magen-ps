@@ -1,0 +1,40 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+include =
+    policy_*
+    ./mongo_apis/*
+    ./google_maps_apis/*
+    ../magen_dctx/dctx_*
+    ../magen_dctx/mongo_dctx/*
+
+# omit overrides include, i.e. plib* is included above but then removed below
+omit =
+    */policy_libs/plib*
+    */tests/*
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+
+show_missing = True
+fail_under = 81
+
+ignore_errors = True
+
+[html]
+directory = coverage_html_report

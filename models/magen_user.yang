@@ -1,0 +1,75 @@
+module magen_user {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_user";
+
+  prefix magen_user;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen users.";
+
+  revision 2015-12-05 {
+    description
+      "First rev";
+  }
+
+  container users {
+    list user {
+      key "uuid";
+      description
+        "A list that holds all users in the domain";
+      leaf user {
+        type string;
+        description "user@domain we get from ISE";
+      }
+      leaf device_id {
+        type string;
+        description "id";
+      }
+      leaf uuid {
+        type yang:uuid;
+        description "user UUID we generate";
+      }
+      leaf department {
+        type string;
+        description "Corporate department";
+      }
+      leaf name {
+        type string;
+        description "Proper name";
+      }
+      leaf position {
+        type string;
+        description "Position such as Engineer";
+      }
+      list u_groups {
+        key "group_id";
+        leaf group_id {
+          type int32;
+          description "group id";
+        }
+      }
+      list u_clients {
+        key "uuid";
+        leaf uuid {
+          type yang:uuid;
+          description "client UUID";
+        }
+      }
+    }
+  }
+}

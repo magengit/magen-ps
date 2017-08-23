@@ -1,0 +1,36 @@
+# build output
+__pycache__
+build
+Dockerfile-e
+Makefile-e
+*.egg-info
+*.whl
+dist
+requirements.txt
+
+# output logs
+logs/
+*.log
+*.out
+
+# test coverage
+.cache
+.coverage
+htmlcov
+coverage_html_report
+
+# sphynx doc
+*.rst
+!index.rst
+_build
+
+# misc
+.idea
+.DS_Store
+magen_logs
+magen_files
+.!*
+_static/
+_templates/
+mongo/
+

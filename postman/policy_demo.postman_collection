@@ -1,0 +1,186 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Policy: Demo Operations (bwa-taxco, bwa-ce, scm)",
+    "_postman_id": "f12eaae7-be8e-a701-fdd7-70dc0727fd6b",
+    "description": "Operations for various demos (box-taxco, box-cisco-enterprise, scm)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Demo:hwa: Bootstrap: Policy_Contract_Create wiley@acmebirdseed.com",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/contracts/contract/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"policy_contract\": [\n        {   \n            \"name\" : \"eng policy\",\n            \"principal\": \"wiley@acmebirdseed.com\",\n            \"principal_group\": \"\",\n            \"action\": \"open\",\n            \"resource_doc\": \"\",\n            \"resource_group\": \"architecture\",\n            \"time_validity_pi\" : 2592000\n        }\n    ]\n}\n"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Demo:scm: Bootstrap: Policy_Contract_Device_Posture_Constraints",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/contracts/contract/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"policy_contract\": [\n        {   \n            \"name\" : \"eng policy\",\n            \"principal\": \"jlaker@trafford.com\",\n            \"principal_group\": \"\",\n            \"action\": \"open\",\n            \"resource_doc\": \"\",\n            \"resource_group\": \"github\",\n            \"time_validity_pi\" : 2592000,\n            \"device_posture\" : \"compliant\"\n        }\n    ]\n}\n"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Demo:scm: Bootstrap: Policy_Session(github-jlaker@trafford.com)",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/sessions/session/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"client\": {   \n        \"user\" : \"jlaker@trafford.com\",\n        \"revision\": \"1\",\n        \"device_id\": \"mac\",\n        \"mc_id\": \"github-jlaker@trafford.com-01.01.FE.DE.2A.11\",\n        \"ip\": \"192.168.1.9\",\n        \"mac\": \"01.01.FE.DE.2A.11\",\n        \"u_groups\" :[\n        \t1,\n           \t2\n        ]\n    }\n}\n"
+        },
+        "description": "Create session for SCM client"
+      },
+      "response": []
+    },
+    {
+      "name": "Demo:scm: Operation: Policy_Access_Validation",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/validation/repository/acme-unicorn-repo/?application=github&client_id=github-jlaker@trafford.com-01.01.FE.DE.2A.11&username=jlaker@trafford.com&action=clone",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+	"body": {
+	    "mode": "raw",
+            "raw": ""
+        },
+        "description": "Validate operation for SCM client"
+      },
+      "response": []
+    },
+    {
+      "name": "Demo bwa-taxco: Bootstrap: Policy_Contract_Create Rod Taxco",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/contracts/contract/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"policy_contract\": [\n        {   \n            \"name\" : \"Tax Documents\",\n            \"principal\": \"clus16.demo user@gmail.com\",\n            \"principal_group\": \"\",\n            \"action\": \"open\",\n            \"resource_doc\": \"\",\n            \"resource_group\": \"budgeting\",\n            \"time_validity_pi\" : 2592000,\n\t        \"location_name\": \"\"\n        }\n    ]\n}\n"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Demo:bwa-taxco: Bootstrap: Policy_Contract_Create Eng Policy",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/contracts/contract/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"policy_contract\": [\n        {   \n            \"name\" : \"eng policy\",\n            \"principal\": \"\",\n            \"principal_group\": \"engineering\",\n            \"action\": \"open\",\n            \"resource_doc\": \"\",\n            \"resource_group\": \"architecture\",\n            \"time_validity_pi\" : 2592000,\n\t        \"location_name\": \"Cisco SJC Campus\"\n        }\n    ]\n}\n"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Demo:bwa-ce: Bootstrap: Policy_Contract_Create Mike@cisco.com",
+      "request": {
+        "url": " {{policy-rest-pfx}}/magen/policy/v2/contracts/contract/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"policy_contract\": [\n        {   \n            \"name\" : \"eng policy\",\n            \"principal\": \"mmilano dev@cisco.com\",\n            \"principal_group\": \"\",\n            \"action\": \"open\",\n            \"resource_doc\": \"\",\n            \"resource_group\": \"architecture\",\n            \"time_validity_pi\" : 2592000\n        }\n    ]\n}\n"
+        },
+        "description": ""
+      },
+      "response": []
+    }
+  ]
+}

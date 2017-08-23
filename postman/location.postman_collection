@@ -1,0 +1,111 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Location",
+    "_postman_id": "cbeb3c1b-c184-6173-6da1-21fc71f4f2b2",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Location: health check",
+      "request": {
+        "url": "{{location-rest-pfx}}/check/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+           "mode": "raw",
+            "raw": ""
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Location: get logging level",
+      "request": {
+        "url": "{{location-rest-pfx}}/magen/location/v2/logging_level/",
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+           "mode": "raw",
+            "raw": ""
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Location: set logging level == debug",
+      "request": {
+        "url": "{{location-rest-pfx}}/magen/location/v2/logging_level/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"level\": \"debug\" }"
+        },
+        "description": ""
+      },
+      "response": []
+    },
+    {
+      "name": "Location Update - 1st Floor",
+      "request": {
+        "url": "{{location-rest-pfx}}/magen/location/v2/lctx/notifications/locationupdate/",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"notifications\":\n    [{\"notificationType\":\"inout\",\n      \"subscriptionName\":\"Paul\",\n      \"entity\":\"WIRELESS_CLIENTS\",\n      \"deviceId\":\"DD-96-9F-4E-3B-28\",\n      \"lastSeen\":\"2016-01-30T14:24:55.475-0800\",\n      \"locationMapHierarchy\":\"Cisco SJC Campus>Building 10>1st Floor>Cafeteria\",\n      \"locationCoordinate\":{\"x\":55.21126,\"y\":29.913364,\"z\":0.0,\"unit\":\"FEET\"},\n      \"geoCoordinate\":{\"latitude\":-999.0,\"longitude\":-999.0,\"unit\":\"DEGREES\",\"lattitude\":-999.0},\n      \"confidenceFactor\":144.0,\n      \"apMacAddress\":null,\n      \"ssid\":null,\n      \"band\":null,\n      \"floorId\":727035700041482283,\n      \"batteryInfo\":null,\n      \"vendorData\":null,\n      \"boundary\":\"INSIDE\",\n      \"areaType\": \"FLOOR\",\n      \"timestamp\":1454192695475}]\n}"
+        },
+        "description": "Generate a location update"
+      },
+      "response": []
+    }
+  ]
+}

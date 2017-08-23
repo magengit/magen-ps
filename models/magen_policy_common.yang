@@ -1,0 +1,52 @@
+module magen_policy_common {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_policy_common";
+
+  prefix magen_policy_common;
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of common YANG definitions used
+     by Magen Policy.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+
+  grouping policy_common-grp  {
+    description
+    "Common policy definition";
+    leaf principal {
+      type string;
+      description "A user such as bob";
+    }
+    leaf principal_group {
+      type string;
+      description "Descriptive group name";
+    }
+    leaf principal_group_num {
+      type yang:gauge32;
+      description "Group ID for principal group";
+    }
+    leaf action {
+      type string;
+      description "TBD";
+    }
+    leaf resource {
+      type string;
+      description "Asset such as a document";
+    }
+    leaf resource_group {
+      type string;
+      description "Asset Group";
+    }
+  }
+}

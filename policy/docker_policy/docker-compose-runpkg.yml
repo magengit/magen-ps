@@ -1,0 +1,32 @@
+# run docker image using installed pkg, not source: mount /opt/svc for cfg/logs
+# ("runpkg" vs "rundev")
+version: "2"
+
+networks:
+  default:
+    external:
+      name: magen_net
+
+services:
+  magen_policy:
+    build: .
+    image: magen_policy:v1.0
+    container_name: magen_policy
+    command: bash -c '(echo "LAUNCHING MAGEN_POLICY CONTAINER.  NOTE -- OUTPUT ALSO LOGGED UNDER DIR=~/magen_data/policy, TO policy_server.log FILE AND TO policy_servers_logs/ SUBDIRECTORY" && policy_server_wrapper.sh -mode operational --data-dir /opt/svc/data --log-dir /opt/svc/policy_servers_logs) 2>&1 | tee -a /opt/svc/policy_server.log'
+    environment:
+      - DATADOG_API_KEY
+      - DATADOG_APP_KEY
+    ports:
+      - "5000:5000"
+      - "5003:5003"
+    volumes:
+      - ~/magen_data/policy/:/opt/svc/
+    stdin_open: true
+    tty: true
+    networks:
+      - default
+  magen_mongo:
+    image: mongo:latest
+    container_name: magen_mongo
+    networks:
+      - default

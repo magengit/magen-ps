@@ -1,0 +1,63 @@
+module magen_policy_session {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_policy_session";
+
+  prefix magen_policy_session;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Policy.";
+
+  revision 2016-01-20 {
+    description
+      "First rev";
+  }
+
+  container sessions {
+    list policy_session {
+      key "uuid";
+      description
+        "A list that holds all policy sessions instantiated
+         from a policy contract";
+      leaf uuid {
+        type yang:uuid;
+        description "Policy Session UUID";
+      }
+      leaf client_uuid {
+        type yang:uuid;
+        description "Client UUID";
+      }
+      leaf expiration {
+        type yang:date-and-time;
+        description "Policy expiration time";
+      }
+      leaf renewal {
+        type yang:date-and-time;
+        description "Policy session renewal time";
+      }
+      list policy_instances {
+        key "uuid";
+        description
+          "A list that holds all policy instances crated
+           from a policy contract";
+        leaf uuid {
+          type yang:uuid;
+          description "Policy Instance UUID";
+        }
+      }
+    }
+  }
+}

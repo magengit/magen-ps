@@ -1,0 +1,64 @@
+module magen_settings {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_settings";
+
+  prefix magen_settings;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+
+  description
+    "This module contains a collection of YANG definitions to configure
+     Magen global settings.";
+
+  revision 2016-05-08 {
+    description
+      "First rev";
+  }
+
+  container settings {
+    description
+      "A container that holds magen settings";
+    leaf cisco_identity_services {
+      type boolean;
+      description "Whether we should use ISE engine";
+    }
+    list trusted_identity_provider {
+      key "name";
+      description
+        "A list that holds all TIP we can interop";
+      leaf name {
+        type string;
+        description "TIP name such as SalesForce";
+      }
+      leaf enabled {
+        type boolean;
+        description "Whether this TIP is enabled or not";
+      }
+    }
+    list active_directory {
+      key "name";
+      description
+        "A list that holds all active directories we can interop";
+      leaf name {
+        type string;
+        description "AD such as Microsoft AD";
+      }
+      leaf enabled {
+        type boolean;
+        description "Whether this AD is enabled or not";
+      }
+    }
+  }
+}

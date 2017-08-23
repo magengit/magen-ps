@@ -1,0 +1,39 @@
+
+
+1. Original commands to generate this directory using sphinx-quickstart,
+   including creating .keep files for git commit.
+   - For location, change project name to "Magen Location"
+   - Note the important of "-q" to keep sphinx-quickstart from asking its
+     interactive questions even though command line options have been
+     specified.
+
+	bash$ cd magen-ps/policy
+	bash$ sphinx-quickstart -q \
+	    --project="Magen Policy" \
+	    --author=RP \
+	    -v 1.0 \
+	    --epub \
+	    --ext-autodoc \
+	    --ext-doctest \
+	    --ext-todo \
+	    --ext-coverage \
+	    --ext-mathjax \
+	    --ext-ifconfig \
+	    --ext-viewcode \
+	    --makefile \
+	    --batchfile \
+	    --templatedir=_ \
+	    ./docs
+	bash$ touch docs/_static/.keep docs/_template/,keep
+
+   Additionally, created this README
+
+2. "make doc_api" step is intended to be done repeatedly, but only when module
+   list changes.
+	bash$ cd magen-ps/policy
+        bash$ make doc_api
+
+3. "make doc" step is done repeatedly whenever html documentation
+    should be generated.
+	bash$ cd magen-ps/policy
+        bash$ make doc

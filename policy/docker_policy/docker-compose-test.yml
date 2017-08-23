@@ -1,0 +1,15 @@
+version: "2"
+services:
+  magen_policy_test:
+    build: .
+    image: magen_policy:v1.0
+    container_name: magen_policy_test
+    command: bash -c 'make test_travis > ../policy_test.log 2>&1 && cat ../policy_test.log'
+    ports:
+      - "5000:5000"
+      - "5003:5003"
+    volumes:
+      - ../..:/opt/server
+  magen_mongo:
+    image: mongo:latest
+    container_name: magen_policy_test_mongo

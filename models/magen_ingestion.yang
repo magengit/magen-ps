@@ -1,0 +1,61 @@
+module magen_ingestion {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_ingestion";
+
+  prefix magen_ingestion;
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Reinaldo Penno <repenno@cisco.com>";
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen Ingestion.";
+
+  revision 2016-08-20 {
+    description
+      "First rev";
+  }
+
+  container assets  {
+    description
+      "An asset is an object such as a file, database or printer";
+    list asset {
+      key "uuid";
+      description
+        "A list that holds all contracts in the domain";
+      leaf uuid {
+        type yang:uuid;
+        description "Asset UUID";
+      }
+      leaf name {
+        type string;
+        description "Asset name";
+      }
+      leaf key {
+        type string;
+        description "Crypto Key";
+      }
+      leaf creation {
+        type yang:date-and-time;
+        description "Asset creation time";
+      }
+      leaf client {
+        type yang:uuid;
+        description "Client UUID";
+      }
+      leaf resource_id {
+        type string;
+        description "Group Id";
+      }
+      leaf resource_group {
+        type string;
+        description "Resource Group";
+      }
+    }
+  }
+}

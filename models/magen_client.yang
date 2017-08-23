@@ -1,0 +1,107 @@
+module magen_client {
+
+  namespace "urn:cisco:params:xml:ns:yang:magen_client";
+
+  prefix magen_client;
+
+  import ietf-inet-types {
+      prefix inet;
+      revision-date 2013-07-15;
+  }
+
+  import ietf-yang-types {
+      prefix yang;
+      revision-date 2013-07-15;
+  }
+
+  organization "Cisco Systems, Inc.";
+  contact "Paul Quinn <paulq@cisco.com>";
+
+
+  description
+    "This module contains a collection of YANG definitions to
+     manage Magen clients.";
+
+  revision 2015-12-07 {
+    description
+      "First rev";
+  }
+
+  typedef client_id_ref {
+    type leafref {
+      path "/magen_client:clients/" +
+        "magen_client:client/magen_client:uuid";
+    }
+    description
+      "This type is used by data models that need to reference
+       a specific service path id.";
+  }
+
+  container clients  {
+    description
+      "A client is a device attached to the network that belongs
+       to a user. Example of a device is iPhone-1 and its user
+       would be bob@example.com";
+    list client {
+      key "uuid";
+      description
+        "A list that holds all clients in the domain";
+      leaf user {
+        type string;
+        description "user@domain";
+        // This is the 'principal' in the policy contract
+        // So, policy contracts and clients and links by user = principal
+      }
+      leaf device_id {
+        type string;
+        description "id";
+      }
+      leaf ip {
+        type inet:ip-address;
+        description "IP address of device";
+      }
+      leaf mac {
+        type yang:mac-address;
+        description "MAC address of device";
+      }
+      leaf uuid {
+        type yang:uuid;
+        description "Client UUID";
+      }
+      leaf dns_name {
+        type inet:domain-name;
+        description "FQDN";
+      }
+      leaf revision {
+        type string;
+        description "not sure the purpose of this";
+      }
+      container _id {
+        leaf _oid {
+          type string;
+          description "Internal ID, such as Mongo's object ID";
+        }
+      }
+      container entitlements {
+        leaf data {
+          type string;
+          description "client permissions. For now simple";
+        }
+      }
+      list policy_sessions {
+        key "uuid";
+        leaf uuid {
+          type yang:uuid;
+          description "Policy Session UUID";
+        }
+      }
+      list u_groups {
+        key "group_id";
+        leaf group_id {
+          type int32;
+          description "group id";
+        }
+      }
+    }
+  }
+}
