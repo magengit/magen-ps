@@ -90,9 +90,10 @@ before_install:
   - sudo chmod +x /usr/local/bin/docker-compose
   - docker-compose -v
   # PIP
-  - sudo cp policy/pip.conf /etc/pip.conf
-  - cp policy/.pypirc ~/.pypirc
+#  - sudo cp policy/pip.conf /etc/pip.conf
+#  - cp policy/.pypirc ~/.pypirc
   - sudo apt-get -qq update
+  - pip3 install twine
 
 install:
   - cd policy
