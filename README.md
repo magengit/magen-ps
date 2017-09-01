@@ -1,5 +1,7 @@
 # Magen Policy Service
 
+[![Build Status](https://travis-ci.org/magengit/magen-ps.svg?branch=master)](https://travis-ci.org/magengit/magen-ps)
+
 Magen Policy Service is a microservice responsible for managing policies and validating asset access requests against the current policies in force. It exposes REST APIs for managing policies. By assets we understand any sensitive resources that could be encrypted or wrapped in order to restrict access to them.
 
 The Magen Policy Service also includes a prototype policy information
