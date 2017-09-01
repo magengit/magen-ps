@@ -110,7 +110,7 @@ script:
 
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
-      make upload
+      make upload;
     else
       echo $TRAVIS_BRANCH;
     fi
