@@ -1,5 +1,6 @@
-set -o pipefail
+#!/usr/bin/env bash
 set -u
+set -o pipefail
 
 PYTHON=python3
 
@@ -40,13 +41,17 @@ COVERAGE_RUN_PS="$_COVERAGE_RUN --append"
 PYTEST=pytest
 
 progname=$(basename $0)
+prog_dir=$(dirname $0)
 
 mode=
 DATA_DIR_ARGS=
 data_dir=
 log_dir=../logs
+log_level=info
 MONGO_PORT_ARGS=
 mongo_ip_port=
+policy_pid=      # policy started by us
+location_pid=    # location started by us
 
 
 usage()
@@ -59,6 +64,17 @@ Description:
 USAGE
 
     exit $1
+}
+
+# on SIGINT, pass signal on to policy and location started by wrapper
+sigint_handler()
+{
+    if [ ! -z "$policy_pid" ]; then
+	kill -SIGTERM $policy_pid
+    fi
+    if [ ! -z "$location_pid" ]; then
+	kill -SIGTERM $location_pid
+    fi
 }
 
 # extract pid for supplied tag
@@ -97,6 +113,8 @@ wait_n_pidlist()
     esac
 }
 
+trap 'sigint_handler' SIGINT
+
 while [ $# != 0 ]; do
     case $1 in
     -mode)
@@ -106,6 +124,10 @@ while [ $# != 0 ]; do
     --data-dir)
 	shift
 	data_dir=$1
+	;;
+    --console-log-level)
+	shift
+	log_level=$1
 	;;
     --log-dir)
 	shift
@@ -158,9 +180,15 @@ test)
     ;;
 esac
 
-policy_server_source=./policy_server/policy_server.py
+# if run from src tree, $prog_dir is <ROOT>/policy_scripts
+policy_server_source_subpath=policy/policy_server/policy_server.py
+location_server_source_subpath=magen_location/location_server/location_server.py
+
+parent=$(dirname $prog_dir)
+policy_server_source=$parent/$policy_server_source_subpath
 if [ -f $policy_server_source ]; then
     ver=source    # source mounted, run source version
+    location_server_source=$parent/$location_server_source_subpath
 else
     ver=installed # source not mounted, run install version
 fi
@@ -175,7 +203,7 @@ source)
 	POLICY_CMD="${COVERAGE_RUN_PS} $policy_server_source"
 	;;
     esac
-    LOCATION_CMD="${PYTHON} ../magen_location/location_server/location_server.py"
+    LOCATION_CMD="${PYTHON} $location_server_source"
     ;;
 installed)
     POLICY_CMD=policy_server.py
@@ -193,7 +221,7 @@ case $mode in
 operational)
     echo "************  EXECUTING POLICY SERVICE ************"
     ${POLICY_CMD} \
-	    --console-log-level debug \
+	    --console-log-level $log_level \
 	    $DATA_DIR_ARGS \
 	    $MONGO_PORT_ARGS \
 	    --log-dir $POLICY_LOG_DIR &
@@ -223,7 +251,7 @@ case $mode in
 operational)
     ${LOCATION_CMD} \
 	    $MONGO_PORT_ARGS \
-	    --console-log-level info \
+	    --console-log-level $log_level \
 	    --log-dir $LOCATION_LOG_DIR &
     ;;
 test)
