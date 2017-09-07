@@ -90,46 +90,6 @@ DCTX_GET_RESP_NONCOMPLIANT_IPAD = """
   "title": "Dctx State(s)"
 }"""
 
-DCTX_POST_REQ_SG_DEVOPS = """
-{
-  "magen_dctx_update": {
-    "device_states": [
-      {
-        "device_id": "01.01.9F.4E.3B.11",
-        "username": "mlipman@cisco.com",
-        "posture": "compliant",
-        "security_group": "devops",
-        "endpointtype": "ipad",
-        "creation_timestamp": "2016-01-01T21:19:55.340000+00:00",
-        "version": 1
-      }
-    ]
-  }
-}"""
-
-DCTX_GET_RESP_SG_DEVOPS = """
-{
-  "response": {
-    "cause": "",
-    "device_states": [
-      {
-        "device_id": "01.01.9F.4E.3B.11",
-        "username": "mlipman@cisco.com",
-        "item_data": {
-          "posture": "compliant",
-          "security_group": "devops",
-          "endpointtype": "ipad"
-        },
-        "creation_timestamp": "2016-01-01T21:19:55.340000+00:00",
-        "version": 1
-      }
-    ],
-    "success": true
-  },
-  "status": 200,
-  "title": "Dctx State(s)"
-}"""
-
 DCTX_POST_REQ_COMPLIANT_MAC = """
 {
   "magen_dctx_update": {
@@ -201,6 +161,46 @@ DCTX_GET_RESP_NONCOMPLIANT_MAC = """
           "endpointtype": "mac"
         },
         "creation_timestamp": "2016-04-04T21:19:55.340000+00:00",
+        "version": 1
+      }
+    ],
+    "success": true
+  },
+  "status": 200,
+  "title": "Dctx State(s)"
+}"""
+
+DCTX_POST_REQ_SG_DEVOPS = """
+{
+  "magen_dctx_update": {
+    "device_states": [
+      {
+        "device_id": "01.01.9F.4E.3B.11",
+        "username": "mlipman@cisco.com",
+        "posture": "compliant",
+        "security_group": "devops",
+        "endpointtype": "ipad",
+        "creation_timestamp": "2016-01-01T21:19:55.340000+00:00",
+        "version": 1
+      }
+    ]
+  }
+}"""
+
+DCTX_GET_RESP_SG_DEVOPS = """
+{
+  "response": {
+    "cause": "",
+    "device_states": [
+      {
+        "device_id": "01.01.9F.4E.3B.11",
+        "username": "mlipman@cisco.com",
+        "item_data": {
+          "posture": "compliant",
+          "security_group": "devops",
+          "endpointtype": "ipad"
+        },
+        "creation_timestamp": "2016-01-01T21:19:55.340000+00:00",
         "version": 1
       }
     ],

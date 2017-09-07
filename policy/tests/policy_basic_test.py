@@ -4,9 +4,11 @@ import json
 from bson.json_util import loads, dumps
 import unittest
 
-from magen_dctx.dctx_lib.dctx_server_urls import DctxServerUrls
-
 sys.path.append("..")
+
+from magen_rest_apis.server_urls import ServerUrls
+
+from magen_dctx.dctx_lib.dctx_server_urls import DctxServerUrls
 
 from policy.policy_server import policy_server
 
@@ -19,8 +21,14 @@ from policy.tests.policy_test_template_messages import *
 from policy.tests.policy_test_session_messages import *
 from policy.tests.policy_test_validation_messages import *
 
-from magen_location.tests.location_test_messages import *
-from magen_dctx.tests.dctx_test_messages import *
+from magen_location.tests.location_test_messages import \
+    LOCATION_PUT_REQ_CAFETERIA, LOCATION_PUT_REQ_CFO_OFFICE
+from magen_dctx.tests.dctx_test_messages import \
+    DCTX_POST_REQ_COMPLIANT_IPAD, DCTX_GET_RESP_COMPLIANT_IPAD, \
+    DCTX_POST_REQ_NONCOMPLIANT_IPAD, DCTX_GET_RESP_NONCOMPLIANT_IPAD, \
+    DCTX_POST_REQ_COMPLIANT_MAC, DCTX_GET_RESP_COMPLIANT_MAC, \
+    DCTX_POST_REQ_NONCOMPLIANT_MAC, DCTX_GET_RESP_NONCOMPLIANT_MAC, \
+    DCTX_POST_REQ_SG_DEVOPS, DCTX_GET_RESP_SG_DEVOPS
 
 __author__ = "Reinaldo Penno"
 __copyright__ = "Copyright(c) 2015, Cisco Systems, Inc."

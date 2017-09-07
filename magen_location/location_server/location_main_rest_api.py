@@ -1,3 +1,5 @@
+import sys
+import time
 import logging
 from http import HTTPStatus
 import importlib.util
@@ -5,11 +7,16 @@ import importlib.util
 import jinja2
 import flask
 from flask import request
+from requests.auth import HTTPBasicAuth
+
 from magen_logger.logger_config import LogDefaults
 from magen_rest_apis.rest_server_apis import RestServerApis
 
+from magen_location.location_libs.location_urls import LocationServerUrls
 from magen_location.location_libs.location_interface import LocationApi
-from magen_location.location_libs.location_dbthread import *
+from magen_location.location_libs.location_dbthread import \
+    LocDb, _ls_spawn_database_update_thread
+from magen_location.location_libs.location_utils import get_url
 
 __author__ = "alifar@cisco.com"
 __copyright__ = "Copyright(c) 2015, Cisco Systems, Inc."

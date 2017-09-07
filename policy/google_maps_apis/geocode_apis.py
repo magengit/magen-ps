@@ -25,7 +25,7 @@ class GeocodeApis(object):
 
         """
         GeocodeApis.logger.error('Unexpected Error. Error: %s', sys.exc_info()[0])
-        return None
+        return None, None
 
     @create_geofence_configuration.register(str)
     def _(geofence_address):

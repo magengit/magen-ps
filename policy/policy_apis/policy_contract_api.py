@@ -4,6 +4,7 @@ import logging
 import re
 import uuid
 from datetime import timedelta, datetime
+from http import HTTPStatus
 
 from magen_logger.logger_config import LogDefaults
 from magen_utils_apis.datetime_api import SimpleUtc

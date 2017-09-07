@@ -9,6 +9,7 @@ from magen_logger.logger_config import LogDefaults
 from magen_rest_apis.rest_server_apis import RestServerApis
 
 from magen_location.location_server.location_main_rest_api import location_v2
+from magen_location.location_libs.location_urls import LocationServerUrls
 
 __author__ = "alifar@cisco.com"
 __copyright__ = "Copyright(c) 2015, Cisco Systems, Inc."

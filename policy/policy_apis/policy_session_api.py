@@ -101,7 +101,7 @@ class PolicySessionApi:
         # Insert Policy Session
         response = MongoPolicySessionApi.insert(policy_session_dict)
         if not response["success"]:
-            msg = "Failed to add Policy Sessions".format(policy_session_dict["mc_id"])
+            msg = "Failed to add Policy Session {}".format(policy_session_dict["mc_id"])
             return HTTPStatus.INTERNAL_SERVER_ERROR, msg
 
         user = client_dict["user"]

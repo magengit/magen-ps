@@ -17,7 +17,6 @@ if src_ver:
     import dev.dctx_magen_env
 from magen_mongo_apis.mongo_core_database import LOCAL_MONGO_LOCATOR
 from magen_logger.logger_config import LogDefaults, initialize_logger
-from magen_rest_apis.magen_app import MagenApp
 
 # Relative imports
 from magen_dctx.dctx_lib.dctx_db_lib import dctx_agt_db_init
