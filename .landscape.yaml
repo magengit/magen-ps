@@ -1,0 +1,15 @@
+doc-warnings: false
+test-warnings: true
+strictness: veryhigh
+max-line-length: 120
+uses:
+  - flask
+autodetect: true
+ignore-patterns:
+  - (^|/)docs(/|$)
+ignore-paths:
+  - policy/docker_policy
+  - policy/data
+  - lib
+python-targets:
+  - 3
