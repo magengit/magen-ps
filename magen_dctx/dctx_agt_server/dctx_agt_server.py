@@ -5,7 +5,6 @@ dctx agent process (vs. integrated into policy process).
 """
 
 import argparse
-import sys
 
 # Package imports from local PIP
 from magen_rest_apis.magen_app import MagenApp

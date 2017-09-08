@@ -1,6 +1,5 @@
 import logging
 from http import HTTPStatus
-import importlib.util
 
 import jinja2
 import flask
@@ -19,6 +18,7 @@ __status__ = "alpha"
 loc_misc_server = flask.Blueprint("misc_server", __name__)
 logger = logging.getLogger(LogDefaults.default_log_name)
 
+
 @loc_misc_server.route('/', methods=["GET"])
 def index():
     """
@@ -26,7 +26,7 @@ def index():
 
       - url - /
     """
-    root_page="""
+    root_page = """
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,8 +63,8 @@ def doc(filename):
     if not location_urls.src_version:
         return "             API/CLI documentation currently only available in development run-mode. (This server instance running from installation package.)"
         # in case documentation is ever made available, still will not have src
-        if filename.startswith('_modules/'):
-            return "         NOTE: Software modules only available when server running from source."
+        # if filename.startswith('_modules/'):
+        #     return "         NOTE: Software modules only available when server running from source."
 
     # development case: render documentation, which must have been built
     doc_template = 'html/' + filename
@@ -75,6 +75,7 @@ def doc(filename):
         result = "           ERROR: Documentation not currently built. (Build documentation with \"cd policy; make doc\")"
 
     return result
+
 
 @loc_misc_server.route('/check/', methods=["GET"])
 def heath_check():
@@ -121,11 +122,11 @@ def logging_level():
     :return: http success/failure response with status message
     :rtype: json
     """
-    op="logging_level"
+    op = "logging_level"
     if request.method == 'GET':
         return RestServerApis.respond(
             HTTPStatus.OK, op,
-            { "success": True, "level": logger.getEffectiveLevel()})
+            {"success": True, "level": logger.getEffectiveLevel()})
 
     level = request.json.get('level')
     logger.debug("set_logging_level: %s", level)
@@ -156,7 +157,7 @@ def _do_set_logging_level(level_str):
     if level_str.isnumeric():
         level = int(level_str)
     else:
-        level=level_str.upper()
+        level = level_str.upper()
 
     logger.setLevel(level=level)
     requestsLogger = logging.getLogger("requests")

@@ -1,20 +1,29 @@
 #! /usr/bin/python3
-import sys
 import json
 from bson.json_util import loads, dumps
 import unittest
-
-sys.path.append("..")
+from http import HTTPStatus
 
 from magen_rest_apis.server_urls import ServerUrls
+from magen_rest_apis.rest_client_apis import RestClientApis
 
 from magen_dctx.dctx_lib.dctx_server_urls import DctxServerUrls
 
 from policy.policy_server import policy_server
 
 from policy.tests.policy_test_common import PolicyTestCommon
-from policy.tests.policy_test_common_rest import *
-
+from policy.tests.policy_test_common_rest import \
+    ptest_check, \
+    ptest_http_get, ptest_http_get_verify_empty, \
+    ptest_http_get_verify_success, \
+    ptest_http_delete, ptest_http_delete_verify_success, \
+    ptest_http_delete_many_and_verify, ptest_http_delete_single_and_verify, \
+    ptest_http_delete_verify_fail404, \
+    load_policies_test, \
+    make_client_all_entitlements_url, make_client_one_entitlement_url, \
+    get_entitlements, get_policy_contracts, \
+    make_validate_asset_access_url, make_validate_repo_access_url, \
+    check_validation
 from policy.tests.policy_test_misc_messages import *
 from policy.tests.policy_test_contract_messages import *
 from policy.tests.policy_test_template_messages import *
@@ -129,9 +138,8 @@ class TestRestApi(unittest.TestCase):
         self.assertIs(get_resp_object.success, True)
 
         message = POLICY_MISC_POST_LOGGING_LEVEL_INFO
-        msg_dict = loads(message)
-        rest_resp = RestClientApis.http_post_and_check_success(
-            log_url, POLICY_MISC_POST_LOGGING_LEVEL_INFO)
+        rest_resp = RestClientApis.http_post_and_check_success(log_url, message)
+        self.assertIs(rest_resp.success, True)
         get_resp_object = RestClientApis.http_get_and_compare_resp(
             log_url, POLICY_MISC_GET_RESP_LOGGING_LEVEL_INFO)
 
@@ -146,7 +154,6 @@ class TestRestApi(unittest.TestCase):
         # - update 1 state record
         # - delete state records by device_id and by all, verifying counts
         print("+++++++++Dctx Database Test+++++++++")
-        server_urls = ServerUrls.get_instance()
         dctx_server_urls = DctxServerUrls()
 
         ptest_http_delete_many_and_verify(self, dctx_server_urls.dctx_all_states_url)
@@ -186,7 +193,7 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_NONCOMPLIANT_MAC
         dctx_dict = loads(message)
-        mac2_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac2_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
@@ -205,7 +212,6 @@ class TestRestApi(unittest.TestCase):
 
         get_resp_object = RestClientApis.http_get_and_check_success(
             dctx_server_urls.dctx_all_states_url)
-        json_body = get_resp_object.json_body
         states = get_resp_object.json_body['response']['device_states']
         self.assertIs(len(states), 3)
 
@@ -223,8 +229,8 @@ class TestRestApi(unittest.TestCase):
         states = get_resp_object.json_body['response']['device_states']
         self.assertIs(len(states), 1)
 
-        ptest_http_delete_many_and_verify(self, dctx_server_urls.dctx_all_states_url) # 1 -> 0
-        
+        ptest_http_delete_many_and_verify(self, dctx_server_urls.dctx_all_states_url)  # 1 -> 0
+
     def test_DctxPosturePolicy(self):
         print("+++++++++ "
               "POST Contract with Principal =, "
@@ -233,7 +239,7 @@ class TestRestApi(unittest.TestCase):
               "Validate Test+++++++++")
         server_urls = ServerUrls.get_instance()
         dctx_server_urls = DctxServerUrls()
-        
+
         ptest_http_delete_many_and_verify(self, dctx_server_urls.dctx_all_states_url)
 
         message = POLICY_CONTRACT_POST_REQ_FINANCE_DCTX_POSTURE
@@ -247,11 +253,12 @@ class TestRestApi(unittest.TestCase):
         request_json = loads(POLICY_SESSION_POST_REQ_MAC_LIPMAN)
         resp_json = loads(POLICY_SESSION_GET_RESP_MAC_LIPMAN_ONE_PI)
         mc_id = PolicyTestCommon.create_and_check_policy_session(
-            self, request_json,resp_json)
+            self, request_json, resp_json)
 
-        assetId = 777 # good assetId, access will succeed
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, access will succeed
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(
+            mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -261,16 +268,16 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_COMPLIANT_IPAD
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
                 dumps(dctx_dict),
                 DCTX_GET_RESP_COMPLIANT_IPAD).success, True)
 
-        assetId = 777 # good assetId, access will succeed
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, access will succeed
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -280,16 +287,16 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_NONCOMPLIANT_IPAD
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
                 dumps(dctx_dict),
                 DCTX_GET_RESP_NONCOMPLIANT_IPAD).success, True)
 
-        assetId = 777 # good assetId, noncompliant device
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, noncompliant device
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -327,10 +334,10 @@ class TestRestApi(unittest.TestCase):
         mc_id = PolicyTestCommon.create_and_check_policy_session(
             self, request_json, resp_json)
 
-        assetId = 777 # good assetId, access will succeed
-        assetName = "GoodAssetIdTestDoc"
+        asset_id = 777  # good asset_id, access will succeed
+        # assetName = "GoodAssetIdTestDoc"
         asset_access_url = make_validate_asset_access_url(
-            mc_id, str(assetId), "open")
+            mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -340,16 +347,16 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_SG_DEVOPS
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
                 dumps(dctx_dict),
                 DCTX_GET_RESP_SG_DEVOPS).success, True)
 
-        assetId = 777 # good assetId, access will succeed
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, access will succeed
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -359,16 +366,16 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_COMPLIANT_IPAD
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
                 dumps(dctx_dict),
                 DCTX_GET_RESP_COMPLIANT_IPAD).success, True)
 
-        assetId = 777 # good assetId, noncompliant device
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, noncompliant device
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -387,10 +394,10 @@ class TestRestApi(unittest.TestCase):
               "PUT Users, PUT Single Client, Put Dctx "
               "and "
               "Validate via SCM Test+++++++++")
-        server_urls= ServerUrls.get_instance()
+        server_urls = ServerUrls.get_instance()
         dctx_server_urls = DctxServerUrls()
         application = "github"
-        
+
         ptest_http_delete_many_and_verify(self, dctx_server_urls.dctx_all_states_url)
 
         message = POLICY_CONTRACT_POST_REQ_FINANCE_SCM_CLONE_DCTX_POSTURE
@@ -408,7 +415,7 @@ class TestRestApi(unittest.TestCase):
         username = request_json['client']['user']
 
         repository = "repo_111"
-        assetName = "GoodAssetIdTestDoc"
+        # assetName = "GoodAssetIdTestDoc"
         repo_access_url = make_validate_repo_access_url(
             application, mc_id, username, str(repository), "clone")
         self.assertIs(
@@ -420,7 +427,7 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_COMPLIANT_IPAD
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
@@ -428,7 +435,7 @@ class TestRestApi(unittest.TestCase):
                 DCTX_GET_RESP_COMPLIANT_IPAD).success, True)
 
         repository = "repo_111"
-        assetName = "GoodAssetIdTestDoc"
+        # assetName = "GoodAssetIdTestDoc"
         repo_access_url = make_validate_repo_access_url(
             application, mc_id, username, str(repository), "clone")
         self.assertIs(
@@ -440,7 +447,7 @@ class TestRestApi(unittest.TestCase):
 
         message = DCTX_POST_REQ_NONCOMPLIANT_IPAD
         dctx_dict = loads(message)
-        mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
+        # mac1_device_id = dctx_dict['magen_dctx_update']['device_states'][0]['device_id']
         self.assertIs(
             RestClientApis.http_post_and_compare_get_resp(
                 dctx_server_urls.dctx_one_state_base_url,
@@ -448,7 +455,7 @@ class TestRestApi(unittest.TestCase):
                 DCTX_GET_RESP_NONCOMPLIANT_IPAD).success, True)
 
         repository = "repo_111"
-        assetName = "GoodAssetIdTestDoc"
+        # assetName = "GoodAssetIdTestDoc"
         repo_access_url = make_validate_repo_access_url(
             application, mc_id, username, str(repository), "clone")
         self.assertIs(
@@ -752,7 +759,7 @@ class TestRestApi(unittest.TestCase):
         self.assertIs(
             ptest_check(server_urls.policy_contracts_url + "?owner=nuala@cisco.com",
                         POLICY_CONTRACT_GET_MANY_RESP_FROM_PT_BY_NUALA,
-                  "Querying for contracts and specific owner"), True)
+                        "Querying for contracts and specific owner"), True)
         # Now we bring the system back to start and
         # check if everything was deleted
         ptest_http_delete_many_and_verify(self, server_urls.policy_contracts_url)
@@ -814,7 +821,7 @@ class TestRestApi(unittest.TestCase):
         self.assertIs(
             ptest_check(server_urls.policy_templates_url + "?user=nuala@cisco.com",
                         POLICY_TEMPLATE_GET_MANY_RESP_USER_FILTER,
-                  "Querying for specific user"), True)
+                        "Querying for specific user"), True)
         # Now we bring the system back to start and
         # check if everything was deleted
         ptest_http_delete_many_and_verify(self, server_urls.policy_templates_url)
@@ -979,28 +986,28 @@ class TestRestApi(unittest.TestCase):
                 "Checking Entitlements"),
             True)
 
-        assetId = 1 # unused for entitlements check
-        asset_access_url = make_validate_asset_access_url(None, str(assetId), "open")
+        asset_id = 1  # unused for entitlements check
+        asset_access_url = make_validate_asset_access_url(None, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
                 POLICY_VALIDATION_GET_RESP_DENIED_MISSING_MIDTOKEN,
                 "Checking Client Action Validation"),
-            False) # no rest-ut fn yet to check json response on 4xx failure
+            False)  # no rest-ut fn yet to check json response on 4xx failure
         asset_access_url = make_validate_asset_access_url(123456789, None, "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
                 POLICY_VALIDATION_GET_RESP_DENIED_MISSING_ASSETID,
                 "Checking Client Action Validation"),
-            False) # no rest-ut fn yet to check json response on 4xx failure
-        asset_access_url = make_validate_asset_access_url(123456789, str(assetId), None)
+            False)  # no rest-ut fn yet to check json response on 4xx failure
+        asset_access_url = make_validate_asset_access_url(123456789, str(asset_id), None)
         self.assertIs(
             check_validation(
                 asset_access_url,
                 POLICY_VALIDATION_GET_RESP_DENIED_MISSING_ACTION,
                 "Checking Client Action Validation"),
-            False) # no rest-ut fn yet to check json response on 4xx failure
+            False)  # no rest-ut fn yet to check json response on 4xx failure
 
         ptest_http_delete_many_and_verify(self, server_urls.policy_sessions_url)
 
@@ -1022,13 +1029,14 @@ class TestRestApi(unittest.TestCase):
             RestClientApis.http_post_and_compare_get_resp(
                 server_urls.policy_contract_url,
                 POLICY_CONTRACT_POST_REQ_ENGINEERING_CAMPUS,
-                POLICY_CONTRACT_GET_RESP_ENGINEERING_CAMPUS_ONE_PI).success, True)
-        entitlements_uri = make_client_all_entitlements_url(mc_id)
+                POLICY_CONTRACT_GET_RESP_ENGINEERING_CAMPUS_ONE_PI).success,
+            True)
 
         # bad messages
-        assetId = 1  # irrelevant for bad client_id test
+        asset_id = 1  # irrelevant for bad client_id test
         # bad client id
-        asset_access_url = make_validate_asset_access_url(123456789, str(assetId), "open")
+        asset_access_url = make_validate_asset_access_url(
+            123456789, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -1036,9 +1044,9 @@ class TestRestApi(unittest.TestCase):
                 "Checking Client Action Validation, Fail(1)"),
             True)
 
-        assetId = 5555  # bad asset id
-        assetName = "BadAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 5555  # bad asset id
+        # assetName = "BadAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -1046,9 +1054,9 @@ class TestRestApi(unittest.TestCase):
                 "Checking Client Action Validation, Fail(2)"),
             True)
 
-        assetId = 777  # good assetId, fail on policy
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, fail on policy
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -1080,9 +1088,9 @@ class TestRestApi(unittest.TestCase):
             self, request_json, resp_json)
         url = server_urls.policy_single_session_url.format(mc_id)
 
-        assetId = 776 # error case: good assetId with no key
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 776  # error case: good asset_id with no key
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -1090,9 +1098,9 @@ class TestRestApi(unittest.TestCase):
                 "Checking Client Action Locationless Validation"),
             True)
 
-        assetId = 777 # good assetId, access will succeed
-        assetName = "GoodAssetIdTestDoc"
-        asset_access_url = make_validate_asset_access_url(mc_id, str(assetId), "open")
+        asset_id = 777  # good asset_id, access will succeed
+        # assetName = "GoodAssetIdTestDoc"
+        asset_access_url = make_validate_asset_access_url(mc_id, str(asset_id), "open")
         self.assertIs(
             check_validation(
                 asset_access_url,
@@ -1210,7 +1218,8 @@ class TestRestApi(unittest.TestCase):
 
         request_json = single_client
         resp_json = loads(POLICY_SESSION_GET_RESP_MAC_LIPMAN_NO_PI)
-        PolicyTestCommon.create_and_check_policy_session(self,request_json,resp_json)
+        PolicyTestCommon.create_and_check_policy_session(
+            self, request_json, resp_json)
 
         # add a policy contract that has a location constraint
         rest_resp = RestClientApis.http_post_and_check_success(
@@ -1223,6 +1232,7 @@ class TestRestApi(unittest.TestCase):
             POLICY_CONTRACT_GET_RESP_FINANCE_FIRST_FLOOR_ONE_PI).success, True)
 
         success, entitlements = get_entitlements(mc_id)
+        self.assertIs(success, True)
         # print("entitlements: ===>", entitlements)
 
         # make sure we got back a single entitlement
@@ -1322,7 +1332,8 @@ class TestRestApi(unittest.TestCase):
                 "check location ok"),
             True)
         # All contracts is not removing all stores?
-        ptest_http_delete_many_and_verify(self, server_urls.policy_contracts_url)
+        ptest_http_delete_many_and_verify(
+            self, server_urls.policy_contracts_url)
 
         get_resp_obj = ptest_http_get(server_urls.location_stores_url)
         ptest_http_get_verify_empty(self, get_resp_obj, "location_stores")
@@ -1340,19 +1351,25 @@ class TestRestApi(unittest.TestCase):
         PolicyTestCommon.check_no_policy(self)
 
     def test_PolicyMain_SetKeyServerUrlHostPort(self):
-        policy_server.main(["--unittest", "--key-server-ip-port", "100.100.100.1:8000", "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
+        policy_server.main(
+            ["--unittest", "--key-server-ip-port", "100.100.100.1:8000",
+             "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
         serverurls = ServerUrls().get_instance()
         self.assertEqual(serverurls.key_server_asset_url,
                          "http://100.100.100.1:8000/magen/ks/v3/asset_keys/assets/asset/")
 
     def test_PolicyMain_SetIngestionServerUrlHostPort(self):
-        policy_server.main(["--unittest", "--ingestion-server-ip-port", "100.100.100.1:8000", "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
+        policy_server.main(
+            ["--unittest", "--ingestion-server-ip-port", "100.100.100.1:8000",
+             "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
         serverurls = ServerUrls().get_instance()
         self.assertEqual(serverurls.ingestion_server_asset_url,
                          "http://100.100.100.1:8000/magen/ingestion/v2/assets/asset/")
 
     def test_PolicyMain_SetIdentityServerUrlHostPort(self):
-        policy_server.main(["--unittest", "--identity-server-ip-port", "100.100.100.1:8000", "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
+        policy_server.main(
+            ["--unittest", "--identity-server-ip-port", "100.100.100.1:8000",
+             "--mongo-ip-port", type(self).LOCAL_MONGO_LOCATOR])
         serverurls = ServerUrls().get_instance()
         self.assertEqual(serverurls.identity_server_base_url,
                          "http://100.100.100.1:8000/magen/id/v2/")

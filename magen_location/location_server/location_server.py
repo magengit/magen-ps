@@ -4,23 +4,11 @@
 # Copyright (c) 2015 Cisco Systems, Inc. and others.  All rights reserved.
 #
 import argparse
+import sys
 import logging
-import socket
-import threading
-import time
-from datetime import datetime
-from functools import wraps
-from http import HTTPStatus
-from uuid import *
 
-from bson.json_util import dumps
-import jinja2
 import flask
-from flask import request
-from flask.json import JSONEncoder
 from flask_cors import CORS
-from requests.auth import HTTPBasicAuth
-from pathlib import Path
 
 # Package imports from local PIP
 from magen_rest_apis.magen_app import MagenApp
@@ -32,19 +20,15 @@ if src_ver:
     import dev.magen_env
 from magen_logger.logger_config import LogDefaults
 from magen_logger.logger_config import initialize_logger
-from magen_utils_apis.datetime_api import SimpleUtc
 from magen_utils_apis import domain_resolver
 from magen_rest_apis.rest_server_apis import RestServerApis
 from magen_rest_apis.server_urls import ServerUrls
 
 
 # Relative imports
-from magen_location.location_libs.llib_policysvc import LlibPolicySvc
-from magen_location.location_libs.location_interface import LocationApi
 from magen_location.location_libs.location_urls import LocationServerUrls
-from magen_location.location_libs.location_utils import put_url, get_url
+from magen_location.location_libs.location_utils import get_url
 from magen_location.location_libs.location_dbthread import CustomJSONEncoder, _ls_spawn_database_update_thread
-from magen_location.location_apis.lctx_service_api import LctxServiceApi
 from magen_location.location_server.location_lctx_rest_api import location_lctx_v2
 from magen_location.location_server.location_misc_rest_api import loc_misc_server
 from magen_location.location_server.location_main_rest_api import location_v2
@@ -75,7 +59,7 @@ CORS(locationServer)
 #   find LCTX via DNS resolution
 
 SERVER_HOST = "0.0.0.0"
-POLICY_HOST="0.0.0.0"
+POLICY_HOST = "0.0.0.0"
 # FIXME: if LCTX_SERVER_LOCATION is 0.0.0.0 then treat as a no-op (for
 # testing without LCTX)
 LCTX_SERVER_LOCATOR = "0.0.0.0"
@@ -90,9 +74,10 @@ def _ls_test_mode_locator(production_mode_locator):
     """
     if not domain_resolver.inside_docker():
         return production_mode_locator
-    locator_components=production_mode_locator.split(':')
+    locator_components = production_mode_locator.split(':')
     locator_components[0] += '_test'
     return ':'.join(locator_components)
+
 
 def _ls_test_mode_url_locators_update_defaults():
     """
@@ -250,7 +235,6 @@ def main():
         "log level=%s, log dir=%s\n",
         args.console_log_level,
         args.log_dir)
-
 
     logger.info("lctx server: %s", args.lctx_server_ip_port)
     location_urls.set_lctx_server_url_host_port(args.lctx_server_ip_port)

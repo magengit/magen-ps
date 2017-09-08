@@ -15,7 +15,7 @@ from policy.policy_libs.policy_eventing import DDPolicyEventsWrapper
 from policy.policy_libs.plib_ingestsvc import PlibIngestSvc
 from policy.policy_libs.plib_keysvc import PlibKeySvc
 from policy.policy_libs.policy_dctx_state import PolicyDctxState
-from policy.policy_libs.policy_state import *
+from policy.policy_libs.policy_state import PolicyDomain
 
 __author__ = "paulq@cisco.com"
 __copyright__ = "Copyright(c) 2015, Cisco Systems, Inc."
@@ -38,7 +38,7 @@ class PolicyValidationApi:
         else:
             ext_time = int_time.isoformat() + "Z"
         return ext_time
-        
+
     @staticmethod
     def _pi_validate(pi: dict, client_uuid, policy_session_dict: dict):
         """
@@ -60,14 +60,14 @@ class PolicyValidationApi:
 
             if pi['t_validator'] is False:
                 pi_ok = False
-                cause='time violation'
+                cause = 'time violation'
 
         # Location constraint check
         if pi_ok and 'location_constraint' in pi:
             if pi['location_valid'] is False:
                 pi_ok = False
-                cause='unauthorized location'
-                                
+                cause = 'unauthorized location'
+
         if pi_ok:
             if 'device_posture' in pi or 'security_group' in pi or 'endpointtype' in pi:
                 if 'dctx_state' not in policy_session_dict:
@@ -75,22 +75,22 @@ class PolicyValidationApi:
                 session_dctx_state = policy_session_dict.get('dctx_state')
                 if session_dctx_state is None:
                     pi_ok = False
-                    cause='dctx state unavailable'
+                    cause = 'dctx state unavailable'
 
         if pi_ok and 'device_posture' in pi:
             if session_dctx_state.get('posture') != pi['device_posture']:
                 pi_ok = False
-                cause='disallowed device posture'
+                cause = 'disallowed device posture'
 
         if pi_ok and 'security_group' in pi:
             if session_dctx_state.get('security_group') != pi['security_group']:
                 pi_ok = False
-                cause='disallowed security_group type'
+                cause = 'disallowed security_group type'
 
         if pi_ok and 'endpointtype' in pi:
             if session_dctx_state.get('endpointtype') != pi['endpointtype']:
                 pi_ok = False
-                cause='disallowed endpoint type'
+                cause = 'disallowed endpoint type'
 
         # FIXME: check other constraints
 
@@ -102,7 +102,6 @@ class PolicyValidationApi:
             pi_uuid=pi['uuid']
         )
         return pi_ok, response
-        
 
     # TODO: Should this function be deleted, since has no use in v2.0 flows?
     # TODO BOX: render entitlements based on magen_resource groups:
@@ -117,14 +116,14 @@ class PolicyValidationApi:
     #      restricted), ...
     # Result: allow, deny, possibly conditional allow (need to get approval
     #   or acknowledgment from end user)
-    @staticmethod
     # keys to be filtered from returned pi dictionary
+    @staticmethod
     @static_vars(pi_key_blacklist=['uuid', 'policy_contract_uuid',
                                    'policy_session_uuid', 'name', 'principal',
                                    'principal_group', 'principal_group_num',
                                    'action', 'client_uuid', 'client_info',
                                    'user', 'creation_timestamp', 'mc_id',
-                                   'location_constraint','location_valid',
+                                   'location_constraint', 'location_valid',
                                    'current_location',
                                    'time_validity_pi', 'validity_timestamp',
                                    't_validator'])
@@ -134,8 +133,8 @@ class PolicyValidationApi:
         logger = logging.getLogger(LogDefaults.default_log_name)
 
         # FIXME: only include PIs that match filterBy constraints
-        policy_session_dict=MongoPolicySessionApi.get_policy_session(mc_id)
-        assert policy_session_dict, "policy session not found" # this should not happen
+        policy_session_dict = MongoPolicySessionApi.get_policy_session(mc_id)
+        assert policy_session_dict, "policy session not found"  # this should not happen
 
         # more rendering
         policy_session_dict["r_groups"] = []
@@ -201,14 +200,14 @@ class PolicyValidationApi:
 
             # Remove pi key:value pairs that should not be returned to client
             policy_instance_dict = {
-                k: v for k, v in policy_instance_dict.items() if k not in PolicyValidationApi.render_entitlements_v2.pi_key_blacklist }
+                k: v for k, v in policy_instance_dict.items() if k not in PolicyValidationApi.render_entitlements_v2.pi_key_blacklist}
 
             policy_session_dict["r_groups"].append(policy_instance_dict)
             # END for policy_instance_uuid in
 
         # Remove ps key:value pairs that should not be returned to client
         policy_session_dict = {
-                k: v for k, v in policy_session_dict.items() if k not in PolicyValidationApi.render_entitlements_v2.ps_key_blacklist }
+            k: v for k, v in policy_session_dict.items() if k not in PolicyValidationApi.render_entitlements_v2.ps_key_blacklist}
 
         # change times from internal to external form
         policy_session_dict['renewal'] = policy_session_dict[
@@ -220,6 +219,7 @@ class PolicyValidationApi:
     # TODO: Should this function be deleted, since has no use in v2.0 flows?
     # FIXME: this function does not cross check client_uuid and cookie,
     #        ensure client_uuid arg matches the one stored in policy instance
+    @staticmethod
     def render_single_entitlement_v2(mc_id, cookie):
 
         db = MainDb.get_core_db_instance()
@@ -264,10 +264,10 @@ class PolicyValidationApi:
 
         # no need to replace with User.collection - better way to use getters everywhere
         # User.collection was just temporary fix
-    
+
         # FIXME: add processing to only include PIs that match filterBy constraints
 
-        policy_session_dict=MongoPolicySessionApi.get_policy_session(mc_id)
+        policy_session_dict = MongoPolicySessionApi.get_policy_session(mc_id)
         assert policy_session_dict, "policy session not found"  # this should not happen
 
         # create a list for matching policy instances
@@ -282,16 +282,16 @@ class PolicyValidationApi:
             policy_instance = db_return.documents
 
             logger.debug("policy_instance=%s", policy_instance)
-        
+
             assert policy_instance, "policy instance does not exist"  # should not be possible
 
             # starting with full policy instance
             policy_instance_dict = policy_instance
-        
+
             # Note: added resource_id in policy contract creation
             # module - so it is there in the policy instance
             assert 'resource_id' in policy_instance_dict, "policy instance does not contain a magen_resource id"
-        
+
             # FIXME: filter more conditions
             pc_policy_domain = PolicyDomain.policy_domain_for_dict(
                 policy_instance_dict)
@@ -300,7 +300,7 @@ class PolicyValidationApi:
 
             # add to list of matching PIs
             matching_policy_instances.append(policy_instance_dict)
-            
+
         logger.debug("matching policy instances: %s", matching_policy_instances)
 
         return True, matching_policy_instances
@@ -346,14 +346,13 @@ class PolicyValidationApi:
                 cause='client does not exist'
             )
             return new_response, partial_event
-        session_dctx_state = None
 
         p_ingest_svc = PlibIngestSvc()
         resp_obj, asset_data = p_ingest_svc.lookup_by_assetId(assetId, midToken)
         json_response = resp_obj.json_body if resp_obj else dict()
         in_response = json_response.get('response', None)
         cause = in_response['cause'] if in_response else None
-        
+
         if not resp_obj.success or resp_obj.http_status == HTTPStatus.NOT_FOUND:
             new_response = dict(
                 access='denied',
@@ -378,10 +377,10 @@ class PolicyValidationApi:
                 cause='no client policy for assetId'
             )
             return new_response, partial_event
-                
+
         authorization_granted_list = list()
         authorization_denied_list = list()
-        policy_names=dict()
+        policy_names = dict()
         for pi in pi_list:
             pi_ok, new_response = PolicyValidationApi._pi_validate(
                 pi, client_uuid, policy_session_dict)
@@ -398,7 +397,7 @@ class PolicyValidationApi:
         logger.debug("denied list=%s", authorization_denied_list)
 
         policy_name = policy_names['granted'] if is_granted else policy_names.get('denied', "")
-        
+
         partial_event = partial(
             DDPolicyEventsWrapper.construct_event, policy=policy_name)
 
@@ -460,7 +459,7 @@ class PolicyValidationApi:
         function")
         :return: tuple: response:dict, partial_event:partial
         """
-        returnKey=False
+        returnKey = False
         return PolicyValidationApi._policy_action_validate(
             PolicyDomain.SCM, username, mc_id, assetId, action, application,
             returnKey)

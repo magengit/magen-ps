@@ -1,8 +1,6 @@
-import logging
 from http import HTTPStatus
 from flask import request
 
-from magen_logger.logger_config import LogDefaults
 from magen_rest_apis.rest_server_apis import RestServerApis
 
 from magen_location.location_client.location_client import LocationClientApi

@@ -14,7 +14,8 @@ from magen_dctx.dctx_lib.dctx_server_urls import DctxServerUrls
 
 from policy.policy_server import policy_server
 
-from policy.tests.policy_test_common_rest import ptest_http_get, \
+from policy.tests.policy_test_common_rest import \
+    ptest_http_get, \
     ptest_http_get_verify_empty, \
     ptest_http_get_verify_notfound, \
     ptest_http_delete, \

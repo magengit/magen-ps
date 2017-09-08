@@ -2,9 +2,7 @@ import sys
 import time
 import logging
 from http import HTTPStatus
-import importlib.util
 
-import jinja2
 import flask
 from flask import request
 from requests.auth import HTTPBasicAuth
@@ -26,6 +24,7 @@ __status__ = "alpha"
 location_v2 = flask.Blueprint("location_v2", __name__)
 location_tracking = flask.Blueprint("location_tracking", __name__)
 logger = logging.getLogger(LogDefaults.default_log_name)
+
 
 @location_v2.route('/client/<mac>/', methods=["GET"])
 def process_get_client_location(mac):
@@ -72,13 +71,13 @@ def show_location_validators():
         location_trackers_list = LocationApi.show_location_trackers()
 
         # This doesn't work in Python 3.4 - which is what we have in Ubuntu dockers
-        #composed_dict = { **location_validators_list, **location_trackers_list }
+        # composed_dict = { **location_validators_list, **location_trackers_list }
         # Until we move fully to Python 3.5.1
-        #composed_dict = location_validators_list.copy()
-        #composed_dict.update(location_trackers_list)
+        # composed_dict = location_validators_list.copy()
+        # composed_dict.update(location_trackers_list)
 
         # creating a new dictionary with separate keys for validators and lctx_trackers
-        # Note: the previous problem with JSONify was due to the lctx trackers 
+        # Note: the previous problem with JSONify was due to the lctx trackers
         # containing a set as a key value (changed it to a list)
         composed_dict = {}
         if location_validators_list or location_trackers_list:
@@ -87,10 +86,10 @@ def show_location_validators():
 
         result = {
             "success": True,
-            "location_stores": composed_dict, # can be empty
+            "location_stores": composed_dict,  # can be empty
             "cause": None}
         return RestServerApis.respond(HTTPStatus.OK, "GET Location Stores",
-                                          result)
+                                      result)
     except TypeError as e:
         e = sys.exc_info()[0]
         print(e)
@@ -245,14 +244,13 @@ def process_start_database_update_thread():
             HTTPStatus.INTERNAL_SERVER_ERROR, "start_database_update_thread", {
                 "success": False, "cause": "thread already running"})
     else:
-        prepare = "success"
         _ls_spawn_database_update_thread("Rest API")
         return RestServerApis.respond(HTTPStatus.OK, "start_database_update_thread",
                                       {"success": True, "cause": "thread started"})
 
 
 @location_v2.route('/database_update_thread/stop/',
-                         methods=["POST", "PUT"])
+                   methods=["POST", "PUT"])
 def process_stop_database_update_thread():
     """
     Disable database update background task (via HTTP POST/PUT).
@@ -268,7 +266,6 @@ def process_stop_database_update_thread():
             HTTPStatus.INTERNAL_SERVER_ERROR, "stop_database_update_thread", {
                 "success": False, "cause": "thread not running"})
     else:
-        prepare = "success"
         LocDb.databaseSignal.go = False
         # wait for thread to exit
         LocDb.databaseUpdateThread.join()
@@ -282,7 +279,7 @@ def process_stop_database_update_thread():
 
 
 @location_v2.route('/database_update_thread/test/<iterations>/',
-                         methods=["POST", "PUT"])
+                   methods=["POST", "PUT"])
 def process_test_thread_counter(iterations):
     """
     Generate test load on location service (via HTTP POST/PUT).
@@ -312,8 +309,7 @@ def process_test_thread_counter(iterations):
         time.sleep(.01)
 
     logger.debug(
-        "test_thread_counter: test started %d iterations" %
-        iterations)
+        "test_thread_counter: test started %d iterations", iterations)
 
     # reset flag - only one iteration should run
     LocDb.databaseSignal.testIterations = 0
@@ -340,6 +336,6 @@ def process_test_thread_counter(iterations):
 
     return RestServerApis.respond(HTTPStatus.OK, "test_thread_counter", {
         "success": True, "cause": "counters incremented in %s secs: sum=%s combined=%s" %
-                                      (totalSecs, sumCounts, combinedCounts)})
+        (totalSecs, sumCounts, combinedCounts)})
 
 

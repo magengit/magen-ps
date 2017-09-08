@@ -1,26 +1,16 @@
 #! /usr/bin/python3
 
-import logging
 import json
 import unittest
 from http import HTTPStatus
-from pathlib import Path
 from unittest.mock import patch
 
 from flask import Flask
 
-from magen_datastore_apis.main_db import MainDb
-from magen_mongo_apis.mongo_core_database import MongoCore
-from magen_mongo_apis.mongo_utils import MongoUtils
-from magen_utils_apis import domain_resolver
 from magen_rest_apis.rest_client_apis import RestClientApis
 from magen_rest_apis.rest_return_api import RestReturn
 from magen_rest_apis.server_urls import ServerUrls
 
-from policy.mongo_apis.mongo_policy_contract import MongoPolicyContract
-from policy.mongo_apis.mongo_policy_instance import MongoPolicyInstance
-from policy.mongo_apis.mongo_policy_session import MongoPolicySession
-from policy.mongo_apis.mongo_policy_template import PolicyTemplate
 from policy.policy_libs.policy_eventing import DDPolicyEventsWrapper
 from policy.policy_libs.plib_ingestsvc import PlibIngestSvc
 from policy.policy_libs.plib_keysvc import PlibKeySvc
@@ -31,11 +21,18 @@ from policy.policy_server.policy_validation_rest_api import policy_validation_v2
 from policy.tests.policy_test_common_rest import make_validate_asset_access_url
 
 from policy.tests.policy_test_common import PolicyTestCommon
-from policy.tests.services_mock_messages import *
-from policy.tests.policy_test_contract_messages import *
-from policy.tests.policy_test_template_messages import *
-from policy.tests.policy_test_session_messages import *
-from policy.tests.policy_test_validation_messages import *
+from policy.tests.services_mock_messages import \
+    INGESTION_ASSET_GET_RESP_FOUND, INGESTION_ASSET_GET_RESP_NOTFOUND, \
+    KEYSVC_ASSET_GET_RESP_NOTFOUND
+from policy.tests.policy_test_contract_messages import \
+    POLICY_CONTRACT_POST_REQ_ENGINEERING_LOCATIONLESS
+from policy.tests.policy_test_session_messages import \
+    POLICY_SESSION_POST_REQ_MAC_LIPMAN
+from policy.tests.policy_test_validation_messages import \
+    POLICY_VALIDATION_GET_RESP_GRANTED_GENERIC, \
+    POLICY_VALIDATION_GET_RESP_DENIED_KEY_NOTFOUND_TA, \
+    POLICY_VALIDATION_GET_RESP_DENIED_INVALID_ASSETID, \
+    POLICY_VALIDATION_GET_RESP_DENIED_UNKNOWN_SESSION
 
 __author__ = "Alena Lifar"
 __email__ = "alifar@cisco.com"
@@ -60,6 +57,7 @@ TEST_ASSET_ID = "test_asset"
 # - these event tests are not included in coverage (which is only on/in
 #   policy server process)
 
+
 def assert_event(client_uuid, validation_dict, event_mock, policy_name, alert):
     """
     Event send_event called with parameters
@@ -83,10 +81,12 @@ def assert_event(client_uuid, validation_dict, event_mock, policy_name, alert):
         event_name=EventsTest.policy_event_title, event_data=event_data, alert=alert
     )
 
+
 # in test mode, use mid_token itself as mc_id
 def plib_id_auth_clt_mcid_from_midtoken_mock(self, mid_token):
     print("======== Mocking id service mcid from midtoken ========")
     return mid_token
+
 
 class EventsTest(unittest.TestCase):
     db = None
@@ -196,7 +196,7 @@ class EventsTest(unittest.TestCase):
             print("======== Mocking RestClient Get calls ========")
             p_ingest_svc = PlibIngestSvc()
             p_key_svc = PlibKeySvc()
-            if p_ingest_svc.single_asset_url(TEST_ASSET_ID)== url:
+            if p_ingest_svc.single_asset_url(TEST_ASSET_ID) == url:
                 # Successful ingestion check for test asset
                 return RestReturn(
                     success=True,
@@ -273,7 +273,7 @@ class EventsTest(unittest.TestCase):
             print("======== Mocking RestClient Get calls ========")
             p_ingest_svc = PlibIngestSvc()
             p_key_svc = PlibKeySvc()
-            if p_ingest_svc.single_asset_url(TEST_ASSET_ID)== url:
+            if p_ingest_svc.single_asset_url(TEST_ASSET_ID) == url:
                 # Successful ingestion check for test asset
                 return RestReturn(
                     success=True,
@@ -347,7 +347,7 @@ class EventsTest(unittest.TestCase):
         def rest_client_get_mock_fail_asset_not_found(url):
             print("======== Mocking RestClient Get calls ========")
             p_ingest_svc = PlibIngestSvc()
-            if p_ingest_svc.single_asset_url(TEST_ASSET_ID)== url:
+            if p_ingest_svc.single_asset_url(TEST_ASSET_ID) == url:
                 # Successful ingestion check for test asset
                 return RestReturn(
                     success=True,
@@ -412,7 +412,7 @@ class EventsTest(unittest.TestCase):
         )
 
         with patch('policy.policy_server.policy_validation_rest_api.PlibIdSvc.auth_clt_mcid_from_midtoken',
-              new=plib_id_auth_clt_mcid_from_midtoken_mock):
+                   new=plib_id_auth_clt_mcid_from_midtoken_mock):
             # Invoking validation call where Event to datadog is created and sent
             with patch('policy.policy_libs.policy_eventing.DDPolicyEventsWrapper.send_event') as event_mock:
                 validation_get_resp_obj = self.app.get(

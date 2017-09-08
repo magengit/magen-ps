@@ -3,17 +3,10 @@ import logging
 import threading
 import time
 from datetime import datetime
-from uuid import *
 
-import flask
-from flask import request
 from flask.json import JSONEncoder
-from flask_cors import CORS
-from requests.auth import HTTPBasicAuth
-from pathlib import Path
 
 from magen_logger.logger_config import LogDefaults
-from magen_logger.logger_config import initialize_logger
 from magen_utils_apis.datetime_api import SimpleUtc
 
 from magen_location.location_libs.location_utils import get_url
@@ -30,6 +23,7 @@ __status__ = "alpha"
 
 logger = logging.getLogger(LogDefaults.default_log_name)
 
+
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         try:
@@ -42,6 +36,7 @@ class CustomJSONEncoder(JSONEncoder):
         else:
             return list(iterable)
         return JSONEncoder.default(self, obj)
+
 
 class Signal:
     go = True  # set to False to cause thread to exit
@@ -111,8 +106,11 @@ def _ls_do_counter_test(iterations):
 # one for web service callback on notifications - main()
 # one for monitoring bus/monitoring database changes - database_update()
 #
-# This could be the way we do time tracking as well - query magen_mongo for time validity expiration and then update next time check
-# and update the time_valid_flag in the PI so it can be used to answer re-validation requests from client
+
+# This could be the way we do time tracking as well - query
+# magen_mongo for time validity expiration and then
+# update next time check and update the time_valid_flag in the PI
+# so it can be used to answer re-validation requests from client
 #
 def _ls_spawn_database_update_thread(caller):
     assert LocDb.databaseSignal is None and LocDb.databaseUpdateThread is None, "database update thread is already initialized"
@@ -138,8 +136,8 @@ def _ls_database_update_thread(caller, signal):
     timeNow = datetime.utcnow().replace(tzinfo=SimpleUtc())
     lastTime = datetime.fromtimestamp(0).replace(tzinfo=SimpleUtc())
     logger.info(
-        "database_update_thread: called by %s starting at %s..." %
-        (caller, timeNow))
+        "database_update_thread: called by %s starting at %s...",
+        caller, timeNow)
     # location_urls = LocationServerUrls.get_instance()
 
     # test whether thread locks are needed
@@ -157,13 +155,15 @@ def _ls_database_update_thread(caller, signal):
         clientMacAddresses = set()
 
         # Note: first walk the list of PIs and initiate location tracking on all of them
-        # store up the unique macAddresses in a set and then iterate over the set getting the current location of each client
-        # this will avoid redundant (expensive) calls to getting the client
-        # location from LCTX
+        # store up the unique macAddresses in a set and then iterate
+        # over the set getting the current location of each client.
+        # this will avoid redundant (expensive) calls to getting the
+        # client location from LCTX
 
         # use the creation timestamp to find new PIs
         # FIXME: Call out to PDP to get PIs to track
-        # Every second check location validators to update if not updated or not updated recently
+        # Every second check location validators to update if not
+        # updated or not updated recently
         # PDP will register location info with location server
         # Every five minutes - get all outstanding PIs - mark and sweep -
         # create/remove location trackers
@@ -174,7 +174,9 @@ def _ls_database_update_thread(caller, signal):
         success, response = get_url(pdp_policy_instances_with_location_url)
 
         if not success:
-            logger.error("pdp server returned error: (%s => %s).  Keeping lastTime=%s", pdp_policy_instances_with_location_url, response, lastTime)
+            logger.error("pdp server returned error: (%s => %s).  Keeping lastTime=%s",
+                         pdp_policy_instances_with_location_url,
+                         response, lastTime)
             policy_instances = list()
             # keep lastTime the same so we get all new policies when PDP is up again
         else:
@@ -285,10 +287,10 @@ def _ls_database_update_thread(caller, signal):
         # Needs to be thread safe
 
         logger.debug(
-            "database_update_thread: %d policy instances updated, %d unique clients found" %
-            (policiesFound, uniqueClientsFound))
+            "database_update_thread: %d policy instances updated, %d unique clients found",
+            policiesFound, uniqueClientsFound)
         logger.debug(
-            "database_update_thread: locationUpdateStats=%s\n" %
+            "database_update_thread: locationUpdateStats=%s\n",
             lctxLocationUpdateStats)
 
         # test thread locking - caller will set the iteration count, then reset once it sees thread started flag set
@@ -298,7 +300,7 @@ def _ls_database_update_thread(caller, signal):
             signal.testStarted = True
             if signal.testType == 'testCounter':
                 logger.info(
-                    "database_update_thread: testCounter: %d test iterations" %
+                    "database_update_thread: testCounter: %d test iterations",
                     iterations)
                 _ls_do_counter_test(iterations)
                 signal.testIterations = 0

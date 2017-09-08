@@ -6,7 +6,6 @@
 
 import argparse
 import signal
-import socket
 import sys
 import logging
 
@@ -58,14 +57,16 @@ __copyright__ = "Copyright(c) 2015, Cisco Systems, Inc."
 __version__ = "0.1"
 __status__ = "alpha"
 
-def _ps_signal_handler(signal, frame):
+
+def _ps_signal_handler(sig, frame):
     """
     Catch supplied signal
 
     Needed for testing with coverage tool, to dump coverage information
     """
-    print("Policy Server got signal, terminating")
+    print("Policy Server got signal %s (frame:%s), terminating", sig, frame)
     sys.exit(0)
+
 
 def _ps_test_mode_locator(production_mode_locator):
     """
@@ -76,11 +77,12 @@ def _ps_test_mode_locator(production_mode_locator):
     """
     if not domain_resolver.inside_docker():
         return production_mode_locator
-    locator_components=production_mode_locator.split(':')
+    locator_components = production_mode_locator.split(':')
     test_suffix = '_test'
     if not locator_components[0].endswith(test_suffix):
         locator_components[0] += test_suffix
     return ':'.join(locator_components)
+
 
 def _ps_test_mode_url_locators_update_defaults():
     """
@@ -103,7 +105,8 @@ def _ps_test_mode_url_locators_update_defaults():
     location_test_locator = _ps_test_mode_locator(location_dflt_locator)
     if location_test_locator != location_dflt_locator:
         server_urls.set_location_server_url_host_port(location_test_locator)
-    
+
+
 def main(args):
     # NOTE: docstring content below was generated using non-default columns:
     #  bash$ COLUMNS=70 policy_server.py --help
@@ -111,7 +114,7 @@ def main(args):
     Run policy server, with following command line options::
 
       bash$ policy_server.py --help
-      usage: 
+      usage:
         python3 policy_server.py \\
             --data-dir <dir> \\
             --database <database> \\
@@ -168,7 +171,6 @@ def main(args):
                                 testsDefault is to run in production mode)
           --unittest            Unit Test ModeDefault is production)
     """
-    ret = sys.argv[1:]
     server_urls = ServerUrls.get_instance()
     pstate = PolicyState()
     pstate.src_version = src_ver

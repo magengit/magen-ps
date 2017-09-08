@@ -1,12 +1,8 @@
 import logging
-import os.path
-from http import HTTPStatus # for UT mocks
 from bson.json_util import dumps
 
 from magen_logger.logger_config import LogDefaults
-from magen_logger.logger_config import initialize_logger
 from magen_utils_apis.singleton_meta import Singleton
-from magen_rest_apis.rest_server_apis import RestServerApis
 
 from magen_location.location_libs.location_urls import LocationServerUrls
 from magen_location.location_libs.location_utils import put_url
@@ -17,6 +13,7 @@ __version__ = "0.2"
 __status__ = "alpha"
 
 logger = logging.getLogger(LogDefaults.default_log_name)
+
 
 class LlibPolicySvc(metaclass=Singleton):
     """
