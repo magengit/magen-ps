@@ -28,7 +28,6 @@ class TestGoogleGeolocation(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @unittest.expectedFailure
     def test_Geocoding(self):
         """
         Connected to Google Maps and performs geocoding
