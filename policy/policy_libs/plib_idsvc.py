@@ -145,4 +145,3 @@ class PlibIdSvc(metaclass=Singleton):
         logger.debug("mc_id:%s from mid_token:%s (full clt_info:%s)",
                      mc_id, mid_token, clt_info_json)
         return mc_id
-        
