@@ -137,10 +137,11 @@ class PlibIdSvc(metaclass=Singleton):
                              pstate.idsclt_secret_file)
                 return None
 
-        clt_info_json = self.id_auth_clt.validate_mid_token_against_id_service(
+        validation_response = self.id_auth_clt.validate_mid_token_against_id_service(
             mid_token)
-        if not clt_info_json:
+        if not validation_response.success:
             return None
+        clt_info_json = validation_response.json_body
         mc_id = clt_info_json.get('mc_id')
         logger.debug("mc_id:%s from mid_token:%s (full clt_info:%s)",
                      mc_id, mid_token, clt_info_json)
