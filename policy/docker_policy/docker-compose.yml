@@ -16,7 +16,7 @@ services:
     build: .
     image: magen_policy:v1.0
     container_name: magen_policy
-    command: bash -c '(echo "LAUNCHING MAGEN_POLICY CONTAINER.  NOTE -- OUTPUT ALSO LOGGED UNDER DIR=policy/.. (WORKSPACE ROOT) TO policy_server.log FILE AND TO policy_servers_logs/ SUBDIRECTORY" && ../policy_scripts/policy_server_wrapper.sh -mode operational --data-dir /opt/server/data --log-dir /opt/server/policy_servers_logs) 2>&1 | tee -a ../policy_server.log'
+    command: bash -c '(echo "LAUNCHING MAGEN_POLICY CONTAINER.  NOTE -- OUTPUT ALSO LOGGED UNDER DIR=policy/.. (WORKSPACE ROOT) TO policy_server.log FILE AND TO logs/policy_servers_logs/ SUBDIRECTORY" && ../policy_scripts/policy_server_wrapper.sh -mode operational --data-dir /opt/server/data --log-dir /opt/server/policy_servers_logs) 2>&1 | tee -a ../policy_server.log'
     #command: /bin/bash
     environment:
       - DATADOG_API_KEY

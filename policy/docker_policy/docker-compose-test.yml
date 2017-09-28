@@ -4,7 +4,7 @@ services:
     build: .
     image: magen_policy:v1.0
     container_name: magen_policy_test
-    command: bash -c 'make test_travis > ../policy_test.log 2>&1 && cat ../policy_test.log'
+    command: bash -c '(echo "LAUNCHING MAGEN_POLICY CONTAINER.  NOTE -- OUTPUT ALSO LOGGED UNDER DIR=policy/.. (WORKSPACE ROOT) TO policy_test.log FILE AND TO logs/policy_test_logs/ SUBDIRECTORY" && make test_travis) 2>&1 | tee -a ../policy_test.log'
     ports:
       - "5000:5000"
       - "5003:5003"
