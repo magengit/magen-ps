@@ -30,7 +30,7 @@ setup(
         'magen_mongo>=1.0a1',
         'magen_rest_service>=1.2a1',
         'magen_statistics_service>=1.0a1',
-        'magen_utils>=1.0a1',
+        'magen_utils>=1.1a1',
         'magen_location_service>=1.0a1'
       ],
     scripts=['policy_server/policy_server.py',
