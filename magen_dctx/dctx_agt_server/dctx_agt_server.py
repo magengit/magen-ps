@@ -10,7 +10,7 @@ import argparse
 from magen_rest_apis.magen_app import MagenApp
 # If this is being run from workspace (as main module),
 # import dev/magen_env.py to add workspace package directories.
-src_ver = MagenApp.app_source_version(__name__, file="dctx_magen_env")
+src_ver = MagenApp.app_source_version(__name__, s_file="dctx_magen_env")
 if src_ver:
     # noinspection PyUnresolvedReferences
     import dev.dctx_magen_env
