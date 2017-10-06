@@ -236,20 +236,6 @@ POLICY_SESSION_GETALL_RESP_BASELINE_CLIENTS_NO_PI = """
         "user": "paulq@cisco.com"
       },
       {
-        "device_id": "iphone",
-        "expiration": "2017-03-19 20:27:04.645000",
-        "ip": "192.168.1.20",
-        "mac": "82-9C-6A-4A-B1-04",
-        "mc_id": "469c6b9c-fe85-461b-ac8a-7bde3745afcc",
-        "renewal": "2017-02-17 21:27:04.645000",
-        "revision": "10",
-        "u_groups": [
-          1,
-          2
-        ],
-        "user": "repenno@cisco.com"
-      },
-      {
         "device_id": "mac",
         "expiration": "2017-03-19 20:27:04.620000",
         "ip": "192.168.1.100",
@@ -271,6 +257,20 @@ POLICY_SESSION_GETALL_RESP_BASELINE_CLIENTS_NO_PI = """
         "mc_id": "d3b7b7e2-ebcd-4649-88bc-97d0eba57c27",
         "renewal": "2017-02-17 21:27:04.633000",
         "revision": "1003",
+        "u_groups": [
+          1,
+          2
+        ],
+        "user": "repenno@cisco.com"
+      },
+      {
+        "device_id": "iphone",
+        "expiration": "2017-03-19 20:27:04.645000",
+        "ip": "192.168.1.20",
+        "mac": "82-9C-6A-4A-B1-04",
+        "mc_id": "469c6b9c-fe85-461b-ac8a-7bde3745afcc",
+        "renewal": "2017-02-17 21:27:04.645000",
+        "revision": "10",
         "u_groups": [
           1,
           2

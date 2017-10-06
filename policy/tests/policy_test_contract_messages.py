@@ -361,7 +361,6 @@ POLICY_CONTRACT_GET_RESP_MARKETING = """
   "title": "Get Policy Contract"
 }"""
 
-
 # Empty location name is in request but is not included in response
 POLICY_CONTRACT_POST_REQ_MARKETING_EMPTY_LOCATION_NAME = """
 {

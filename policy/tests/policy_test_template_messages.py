@@ -112,7 +112,6 @@ POLICY_TEMPLATE_GET_RESP_FINANCE = """
   "title": "Get Policy Template"
 }"""
 
-
 POLICY_TEMPLATE_GET_RESP_ACCOUNTING = """
 {
   "response": {

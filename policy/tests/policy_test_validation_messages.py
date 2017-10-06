@@ -299,21 +299,6 @@ MAGEN_ENTITLEMENTS_GET_RESP_MAC_LIPMAN_SINGLE_SESSION_MULTI_PI = """
         "resource_id": 1
       },
       {
-          "apps": [
-              "Microsoft PowerPoint",
-              "Microsoft Word",
-              "Microsoft Excel"
-          ],
-          "environment": {
-              "pdp-authorize": {
-                  "cookie": "97591d32-8301-4055-b658-0a9d31888f19",
-                  "revalidation": 60
-              }
-          },
-          "resource_group": "architecture",
-          "resource_id": 1
-      },
-      {
         "apps": [
           "Microsoft PowerPoint",
           "Microsoft Word",
@@ -357,6 +342,21 @@ MAGEN_ENTITLEMENTS_GET_RESP_MAC_LIPMAN_SINGLE_SESSION_MULTI_PI = """
         },
         "resource_doc": "engineeringplans.ppt",
         "resource_id": "e2e75de2-915c-4340-abfd-5aaf743895df"
+      },
+      {
+          "apps": [
+              "Microsoft PowerPoint",
+              "Microsoft Word",
+              "Microsoft Excel"
+          ],
+          "environment": {
+              "pdp-authorize": {
+                  "cookie": "97591d32-8301-4055-b658-0a9d31888f19",
+                  "revalidation": 60
+              }
+          },
+          "resource_group": "architecture",
+          "resource_id": 1
       },
       {
         "apps": [
