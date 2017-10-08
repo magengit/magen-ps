@@ -90,19 +90,25 @@ class TestRestApi(unittest.TestCase):
             RestClientApis.http_post_and_compare_get_resp(
                 server_urls.policy_contract_url,
                 POLICY_CONTRACT_POST_REQ_FINANCE_FROM_PT_FIRST_FLOOR,
-                POLICY_CONTRACT_GET_RESP_FINANCE_FROM_PT_FIRST_FLOOR_NO_PI).success)
+                POLICY_CONTRACT_GET_RESP_FINANCE_FROM_PT_FIRST_FLOOR_NO_PI,
+                compare_utils.full_compare_except_keys(['PI_list', 'policy_template_uuid'])
+            ).success)
         # Principal contract
         self.assertTrue(
             RestClientApis.http_post_and_compare_get_resp(
                 server_urls.policy_contract_url,
                 POLICY_CONTRACT_POST_REQ_FINANCE_FROM_PT_BY_NUALA_FOR_ROD,
-                POLICY_CONTRACT_GET_RESP_FINANCE_FROM_PT_BY_NUALA_FOR_ROD_NO_PI).success)
+                POLICY_CONTRACT_GET_RESP_FINANCE_FROM_PT_BY_NUALA_FOR_ROD_NO_PI,
+                compare_utils.full_compare_except_keys(['PI_list', 'policy_template_uuid'])
+            ).success)
         # Principal contract
         self.assertTrue(
             RestClientApis.http_post_and_compare_get_resp(
                 server_urls.policy_contract_url,
                 POLICY_CONTRACT_POST_REQ_MARKETING_FROM_PT_BY_NUALA,
-                POLICY_CONTRACT_GET_RESP_MARKETING_FROM_PT_BY_NUALA_NO_PI).success)
+                POLICY_CONTRACT_GET_RESP_MARKETING_FROM_PT_BY_NUALA_NO_PI,
+                compare_utils.full_compare_except_keys(['PI_list', 'policy_template_uuid']
+            )).success)
         RestClientApis.http_put_and_check_success(server_urls.policy_full_reset_url, None)
         PolicyTestCommon.check_no_policy(self)
 
