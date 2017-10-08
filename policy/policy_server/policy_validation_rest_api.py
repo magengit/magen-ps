@@ -121,6 +121,7 @@ def policy_validate_repository_access(repositoryId):
     :rtype: json
     """
     pstate = PolicyState()
+    pstate.test_mode = True
     logger = logging.getLogger(LogDefaults.default_log_name)
     logger.debug("validate_repo_access: request: %s request.args: %s", request, request.args)
 
@@ -166,6 +167,7 @@ def policy_entitlements_get_by_client():
     :rtype: json
     """
     pstate = PolicyState()
+    # pstate.test_mode = True
     logger = logging.getLogger(LogDefaults.default_log_name)
     logger.debug("get entitlements v2: request: %s request.args: %s", request, request.args)
 

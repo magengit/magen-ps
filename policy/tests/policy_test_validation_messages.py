@@ -1,6 +1,5 @@
 """
 REST Policy Validation Messages Payload, for automated testing
-
 - Naming convention:
   POLICY_VALIDATION_<op>_<REQ,RESP_<GRANTED,DENIED_<why>>
   - <op>:                POST, PUT, GET, GET_MANY

@@ -1,13 +1,12 @@
 #! /usr/bin/python3
 import logging
-from http import HTTPStatus
 
 # Package imports from local PIP
 from magen_logger.logger_config import LogDefaults
 from magen_rest_apis.rest_client_apis import RestClientApis
 from magen_rest_apis.server_urls import ServerUrls
+from magen_utils_apis import compare_utils
 
-from policy.policy_libs.policy_state import PolicyState
 
 from policy.tests.policy_test_contract_messages import POLICY_CONTRACT_PUT_REQ_BASELINE_CONTRACTS
 
@@ -165,7 +164,11 @@ def ptest_check(url, json_resp, message, dd_mock=None):
         dd_mock.start()
     print(message, "\n")
 
-    rest_resp = RestClientApis.http_get_and_compare_resp(url, json_resp)
+    rest_resp = RestClientApis.http_get_and_compare_resp(
+        url,
+        json_resp,
+        compare_utils.full_compare_except_keys(['PI_list', 'policy_template_uuid', 'pi_uuid'])
+    )
     if dd_mock:
         dd_mock.stop()
     if not rest_resp.success:
@@ -238,7 +241,7 @@ def check_validation(url, json_resp, message, event_mock=None):
     if event_mock:
         event_mock.start()
     print(message, "\n")
-    rest_resp = RestClientApis.http_get_and_compare_resp(url, json_resp)
+    rest_resp = RestClientApis.http_get_and_compare_resp(url, json_resp, compare_utils.full_compare_except_keys(['pi_uuid', 'mc_id', 'cookie', 'resource_id']))
     if event_mock:
         event_mock.stop()
     if rest_resp.success:
@@ -256,9 +259,3 @@ def get_policy_contracts():
     server_urls = ServerUrls.get_instance()
     url = server_urls.policy_contracts_url
     return get_json(url)
-
-
-
-
-
-
