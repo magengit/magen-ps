@@ -1,9 +1,9 @@
 import logging
 from json import loads, dumps
-import requests # for get_page()
+import requests  # for get_page()
 
 from magen_logger.logger_config import LogDefaults, initialize_logger
-from magen_utils_apis import domain_resolver
+from magen_utils_apis import domain_resolver, compare_utils
 from magen_datastore_apis.main_db import MainDb
 from magen_mongo_apis.mongo_core_database import MongoCore
 from magen_mongo_apis.mongo_utils import MongoUtils
@@ -20,8 +20,8 @@ from policy.tests.policy_test_common_rest import \
     ptest_http_get_verify_notfound, \
     ptest_http_delete, \
     ptest_http_delete_verify_success, \
-    ptest_http_delete_many_and_verify, \
-    ptest_http_get_verify_fail404
+    ptest_http_delete_many_and_verify
+
 
 __copyright__ = "Copyright(c) 2017, Cisco Systems, Inc."
 __version__ = "0.1"
@@ -156,7 +156,6 @@ class PolicyTestCommon(object):
         single_contract_url = server_urls.policy_single_contract_url.format(uuid)
         return ptest_http_delete(single_contract_url)
 
-
     @staticmethod
     def create_and_check_policy_session(test_instance, request, response):
         """
@@ -170,10 +169,10 @@ class PolicyTestCommon(object):
         server_urls = ServerUrls.get_instance()
         test_instance.assertIs(RestClientApis.http_post_and_compare_get_resp(
             server_urls.policy_session_url,
-            dumps(request), dumps(response)).success, True)
+            dumps(request), dumps(response),
+            compare_utils.full_compare_except_keys(['mc_id', 'policy_instances'])).success, True)
         mc_id = request["client"]['mc_id']
         return mc_id
-
 
     @staticmethod
     def create_and_check_multiple_policy_sessions(
@@ -189,5 +188,7 @@ class PolicyTestCommon(object):
             # Check to see that we can fetch all of the policy sessions at once
             test_instance.assertIs(
                 RestClientApis.http_get_and_compare_resp(
-                    server_urls.policy_sessions_url, getall_resp_str).success,
+                    server_urls.policy_sessions_url, getall_resp_str,
+                    compare_utils.full_compare_except_keys(['mc_id', 'policy_template_uuid'])
+                ).success,
                 True)
