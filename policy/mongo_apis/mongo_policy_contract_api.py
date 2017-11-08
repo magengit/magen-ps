@@ -30,6 +30,7 @@ class MongoPolicyContractApi(object):
         mongo_result = db.policy_contract_strategy.insert(policy_contract_dict)
         return {"success": mongo_result.success, "response": mongo_result.message}
 
+    # FIXME: No usages found - implementation seems to be wrong
     def get_name_and_id(self, seed):
         """
         :param seed: Unique ID

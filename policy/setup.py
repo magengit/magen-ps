@@ -25,7 +25,7 @@ setup(
         'Sphinx>=1.6.3',
         'wheel>=0.30.0a0',
         'googlemaps>=2.5.1',
-        'magen_id_client>=1.1a1',
+        'magen_id_client>=2.0a0',
         'magen_logger>=1.0a1',
         'magen_mongo>=1.0a1',
         'magen_rest_service>=1.2a1',
