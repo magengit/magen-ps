@@ -1,7 +1,7 @@
 # Magen Policy Service
 
 [![Build Status](https://travis-ci.org/magengit/magen-ps.svg?branch=master)](https://travis-ci.org/magengit/magen-ps)
-[![codecov](https://codecov.io/gh/magengit/magen-ps/branch/master/graph/badge.svg)](https://codecov.io/gh/magengit/magen-ps) 
+[![codecov](https://codecov.io/gh/magengit/magen-ps/branch/master/graph/badge.svg)](https://codecov.io/gh/magengit/magen-ps)
 [![Code Health](https://landscape.io/github/magengit/magen-ps/master/landscape.svg?style=flat)](https://landscape.io/github/magengit/magen-ps/master)
 
 Magen Policy Service is a microservice responsible for managing policies and validating asset access requests against the current policies in force. It exposes REST APIs for managing policies. By assets we understand any sensitive resources that could be encrypted or wrapped in order to restrict access to them.
@@ -14,6 +14,15 @@ access to devices in a specific geographical area. The Location
 Service could be the Policy Service's source for the needed device location information.
 
 Current version: ```1.0a1```
+
+## Git clone
+
+All of Magen services depend on an operations git submodule [**magen_helper**](https://github.com/magengit/magen-helper).
+When cloning this repo, make sure to provide ```--recursive``` flag or after the clone execute a command to update ```magen-helpers``` git submodule:
+
+```
+git submodule update --init --recursive
+```
 
 For This Service there are available ```make``` commands. Makefile is located under [**policy/**](policy)
 
