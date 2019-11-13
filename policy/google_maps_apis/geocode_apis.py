@@ -15,7 +15,7 @@ __status__ = "alpha"
 
 
 class GeocodeApis(object):
-    gmaps = googlemaps.Client(key='AIzaSyAgeBEokKn7MT8CDc3u_e36dR0Y-fZnsTk')
+    gmaps = googlemaps.Client(key='add a key')
 
     logger = logging.getLogger(LogDefaults.default_log_name)
 
